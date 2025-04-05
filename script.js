@@ -1,6 +1,6 @@
 // Firebase yapılandırması (Firebase Console’dan aldığın yapılandırmayı buraya yapıştır)
 const firebaseConfig = {
-    apiKey: "AIzaSyBb_mDuwKyWCZz6ix3k9dsN5tJzvn2BGes",
+    apiKey: "*",
     authDomain: "mutfak-olcu-donusturucu.firebaseapp.com",
     projectId: "mutfak-olcu-donusturucu",
     storageBucket: "mutfak-olcu-donusturucu.firebasestorage.app",
