@@ -3,95 +3,43 @@ const categories = {
     mutfak: {
         name: "Mutfak Malzemeleri",
         items: {
-            sut: {
-                name: "Süt",
-                rates: {
-                    gram: 1,
-                    ml: 1,
-                    yemek_kasigi: 15,
-                    tatli_kasigi: 5,
-                    cay_kasigi: 2.5,
-                    su_bardagi: 200,
-                    cay_bardagi: 110,
-                    fincan: 80
-                }
-            },
             un: {
                 name: "Un",
                 rates: {
                     gram: 1,
-                    ml: 1.82,
-                    yemek_kasigi: 8,
-                    tatli_kasigi: 3,
-                    cay_kasigi: 1.5,
-                    su_bardagi: 110,
-                    cay_bardagi: 65,
-                    fincan: 45
+                    ml: 0.6,
+                    yemek_kasigi: 10,
+                    tatli_kasigi: 5,
+                    cay_kasigi: 3,
+                    su_bardagi: 120,
+                    cay_bardagi: 80,
+                    fincan: 100
                 }
             },
-            toz_seker: {
-                name: "Toz Şeker",
+            seker: {
+                name: "Şeker (Toz)",
                 rates: {
                     gram: 1,
-                    ml: 1.18,
-                    yemek_kasigi: 13,
-                    tatli_kasigi: 4,
-                    cay_kasigi: 2,
-                    su_bardagi: 170,
-                    cay_bardagi: 95,
-                    fincan: 70
+                    ml: 0.85,
+                    yemek_kasigi: 12,
+                    tatli_kasigi: 6,
+                    cay_kasigi: 3,
+                    su_bardagi: 200,
+                    cay_bardagi: 100,
+                    fincan: 180
                 }
             },
             pirinc: {
                 name: "Pirinç",
                 rates: {
                     gram: 1,
-                    ml: 1.25,
-                    yemek_kasigi: 12,
-                    tatli_kasigi: 4,
-                    cay_kasigi: 2,
-                    su_bardagi: 165,
-                    cay_bardagi: 90,
-                    fincan: 65
-                }
-            },
-            bulgur: {
-                name: "Bulgur",
-                rates: {
-                    gram: 1,
-                    ml: 1.33,
-                    yemek_kasigi: 11,
-                    tatli_kasigi: 4,
-                    cay_kasigi: 2,
-                    su_bardagi: 150,
-                    cay_bardagi: 85,
-                    fincan: 60
-                }
-            },
-            sivi_yag: {
-                name: "Sıvı Yağ",
-                rates: {
-                    gram: 1,
-                    ml: 1.09,
-                    yemek_kasigi: 14,
-                    tatli_kasigi: 5,
-                    cay_kasigi: 2.5,
-                    su_bardagi: 185,
-                    cay_bardagi: 100,
-                    fincan: 75
-                }
-            },
-            su: {
-                name: "Su",
-                rates: {
-                    gram: 1,
-                    ml: 1,
+                    ml: 0.9,
                     yemek_kasigi: 15,
-                    tatli_kasigi: 5,
-                    cay_kasigi: 2.5,
+                    tatli_kasigi: 8,
+                    cay_kasigi: 4,
                     su_bardagi: 200,
-                    cay_bardagi: 110,
-                    fincan: 80
+                    cay_bardagi: 100,
+                    fincan: 170
                 }
             }
         }
@@ -109,18 +57,14 @@ const unitDisplayNames = {
     fincan: "Fincan"
 };
 
-// Auth işlemleri (localStorage ile)
+// Auth işlemleri
 function initAuth() {
     const authTabs = document.querySelectorAll('.auth-tab');
     const authForms = document.querySelectorAll('.auth-form');
-    const loginBtn = document.getElementById('login-btn');
-    const registerBtn = document.getElementById('register-btn');
-    const logoutBtn = document.getElementById('logout-btn');
-
-    // Hata ayıklama: Butonlar bulundu mu?
-    if (!loginBtn) console.error("Giriş butonu bulunamadı!");
-    if (!registerBtn) console.error("Kayıt butonu bulunamadı!");
-
+    const loginForm = document.getElementById('login-form');
+    const registerForm = document.getElementById('register-form');
+    const logoutBtn = document.getElementById('logout-btn'); // Logout butonunu seç
+    
     authTabs.forEach(tab => {
         tab.addEventListener('click', () => {
             authTabs.forEach(t => t.classList.remove('active'));
@@ -130,88 +74,63 @@ function initAuth() {
         });
     });
 
-    registerBtn.addEventListener('click', () => {
+    registerForm.addEventListener('submit', (e) => {
+        e.preventDefault();
         const username = document.getElementById('register-username').value;
         const password = document.getElementById('register-password').value;
         const ingredient = document.getElementById('favorite-ingredient').value;
 
-        if (!username || !password || !ingredient) {
-            alert('Lütfen tüm alanları doldurun!');
+        // localStorage kullanarak kullanıcıları sakla
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        
+        // Kullanıcı adı kontrolü
+        if (users.some(user => user.username.toLowerCase() === username.toLowerCase())) {
+            alert('Bu kullanıcı adı zaten kayıtlı! Lütfen başka bir kullanıcı adı seçin.');
             return;
         }
 
-        // localStorage'dan mevcut kullanıcıları al
-        const users = JSON.parse(localStorage.getItem('users')) || [];
-
-        // Kullanıcı adı zaten var mı kontrol et
-        if (users.some(user => user.username === username)) {
-            alert('Bu kullanıcı adı zaten alınmış!');
-            return;
-        }
-
-        // Yeni kullanıcıyı ekle
-        const newUser = {
-            username: username,
-            password: password, // Not: Gerçek uygulamalarda şifreyi hash'lemek gerekir
-            ingredient: ingredient
-        };
-        users.push(newUser);
+        users.push({ username, password, ingredient });
         localStorage.setItem('users', JSON.stringify(users));
-
         alert('Kayıt başarılı! Giriş yapabilirsiniz.');
         authTabs[0].click();
     });
 
-    loginBtn.addEventListener('click', () => {
+    loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
         const username = document.getElementById('login-username').value;
         const password = document.getElementById('login-password').value;
 
-        if (!username || !password) {
-            alert('Lütfen tüm alanları doldurun!');
-            return;
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        const user = users.find(u => u.username.toLowerCase() === username.toLowerCase() && u.password === password);
+        
+        if (user) {
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            document.getElementById('auth-container').style.display = 'none';
+            document.querySelector('.main-container').style.display = 'block';
+            document.querySelector('.subtitle').textContent = `Hoş geldin, ${user.username}!`;
+            logoutBtn.style.display = 'inline-block'; // Logout butonunu göster
+        } else {
+            alert('Kullanıcı adı veya şifre hatalı!');
         }
-
-        // localStorage'dan kullanıcıları al
-        const users = JSON.parse(localStorage.getItem('users')) || [];
-        const user = users.find(u => u.username === username && u.password === password);
-
-        if (!user) {
-            alert('Kullanıcı adı veya şifre yanlış!');
-            return;
-        }
-
-        // Kullanıcıyı oturum açmış olarak işaretle
-        const userInfo = {
-            username: user.username,
-            ingredient: user.ingredient
-        };
-        localStorage.setItem('currentUser', JSON.stringify(userInfo));
-
-        document.getElementById('auth-container').style.display = 'none';
-        document.querySelector('.main-container').style.display = 'block';
-        document.querySelector('.subtitle').textContent = `Hoş geldin, ${userInfo.username}!`;
-        logoutBtn.style.display = 'inline-block';
-        loadRecipes();
     });
 
-    // Oturum kontrolü
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    // Eğer kullanıcı zaten giriş yapmışsa
+    const currentUser = localStorage.getItem('currentUser');
     if (currentUser) {
         document.getElementById('auth-container').style.display = 'none';
         document.querySelector('.main-container').style.display = 'block';
-        document.querySelector('.subtitle').textContent = `Hoş geldin, ${currentUser.username}!`;
-        document.getElementById('logout-btn').style.display = 'inline-block';
-        loadRecipes();
+        document.querySelector('.subtitle').textContent = `Hoş geldin, ${JSON.parse(currentUser).username}!`;
+        logoutBtn.style.display = 'inline-block'; // Logout butonunu göster
     }
 }
 
-// Logout fonksiyonu
+// Logout fonksiyonu (Yeni eklenen kısım)
 function logout() {
-    localStorage.removeItem('currentUser');
-    document.getElementById('auth-container').style.display = 'flex';
-    document.querySelector('.main-container').style.display = 'none';
-    document.querySelector('.subtitle').textContent = 'Mutfakta ölçüleri kolayca dönüştürün';
-    document.getElementById('logout-btn').style.display = 'none';
+    localStorage.removeItem('currentUser'); // Mevcut kullanıcıyı kaldır
+    document.getElementById('auth-container').style.display = 'flex'; // Giriş ekranını göster
+    document.querySelector('.main-container').style.display = 'none'; // Ana ekranı gizle
+    document.querySelector('.subtitle').textContent = 'Mutfakta ölçüleri kolayca dönüştürün'; // Başlığı sıfırla
+    document.getElementById('logout-btn').style.display = 'none'; // Logout butonunu gizle
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -283,28 +202,43 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const currentUser = JSON.parse(localStorage.getItem('currentUser'));
         const recipe = {
-            username: currentUser.username, // Kullanıcıya göre tarifleri ayırmak için
-            id: Date.now().toString(), // Benzersiz bir ID oluştur
+            id: Date.now(),
             name: recipeName,
             description: recipeDescription,
             ingredients: ingredients,
-            date: new Date().toLocaleDateString()
+            date: new Date().toLocaleDateString(),
+            userId: currentUser.username
         };
 
-        // localStorage'dan mevcut tarifleri al
-        const recipes = JSON.parse(localStorage.getItem('recipes')) || [];
+        // Mevcut tarifleri al
+        let recipes = JSON.parse(localStorage.getItem('recipes') || '[]');
         recipes.push(recipe);
         localStorage.setItem('recipes', JSON.stringify(recipes));
 
+        // siteStorage.txt dosyasına kaydet
+        const recipeText = `${recipe.userId} - ${recipe.name} - ${recipe.date}\n\n`;
+        
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/append-storage', true);
+        xhr.setRequestHeader('Content-Type', 'text/plain');
+        xhr.send(recipeText);
+
+        // Tarif kartını ekle
         addRecipeCard(recipe);
+
+        // Formu temizle
         recipeForm.reset();
         document.querySelectorAll('.ingredient-row').forEach((row, index) => {
             if (index !== 0) row.remove();
         });
+
         alert('Tarif başarıyla kaydedildi!');
     });
 
-    // Logout butonuna event listener ekle
+    // Sayfa yüklendiğinde tarifleri göster
+    loadRecipes();
+
+    // Logout butonuna event listener ekle (Yeni eklenen kısım)
     document.getElementById('logout-btn').addEventListener('click', logout);
 });
 
@@ -327,7 +261,7 @@ function addRecipeCard(recipe) {
             </ul>
         </div>
         <div class="recipe-actions">
-            <button class="delete-recipe" onclick="deleteRecipe('${recipe.id}')">Sil</button>
+            <button class="delete-recipe" onclick="deleteRecipe(${recipe.id})">Sil</button>
         </div>
     `;
     recipesGrid.appendChild(card);
@@ -335,22 +269,21 @@ function addRecipeCard(recipe) {
 
 function loadRecipes() {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    if (!currentUser) return;
-
-    const recipes = JSON.parse(localStorage.getItem('recipes')) || [];
-    const userRecipes = recipes.filter(recipe => recipe.username === currentUser.username);
+    let recipes = JSON.parse(localStorage.getItem('recipes') || '[]');
+    // Sadece mevcut kullanıcının tariflerini filtrele
+    recipes = recipes.filter(recipe => recipe.userId === currentUser.username);
+    
     const recipesGrid = document.querySelector('.recipes-grid');
-    recipesGrid.innerHTML = userRecipes.length ? '' : '<p class="no-recipes">Henüz kayıtlı tarif yok.</p>';
-    userRecipes.forEach(recipe => addRecipeCard(recipe));
+    recipesGrid.innerHTML = recipes.length ? '' : '<p class="no-recipes">Henüz kayıtlı tarif yok.</p>';
+    recipes.forEach(recipe => addRecipeCard(recipe));
 }
 
 function deleteRecipe(id) {
     if (confirm('Bu tarifi silmek istediğinizden emin misiniz?')) {
-        const recipes = JSON.parse(localStorage.getItem('recipes')) || [];
-        const updatedRecipes = recipes.filter(recipe => recipe.id !== id);
-        localStorage.setItem('recipes', JSON.stringify(updatedRecipes));
+        let recipes = JSON.parse(localStorage.getItem('recipes') || '[]');
+        recipes = recipes.filter(recipe => recipe.id !== id);
+        localStorage.setItem('recipes', JSON.stringify(recipes));
         loadRecipes();
-        alert('Tarif silindi');
     }
 }
 
