@@ -1,45 +1,97 @@
-// Kategoriler ve malzemeler
+// Kategoriler ve malzemeler (Güncellenmiş hali)
 const categories = {
     mutfak: {
         name: "Mutfak Malzemeleri",
         items: {
+            sut: {
+                name: "Süt",
+                rates: {
+                    gram: 1,
+                    ml: 1,
+                    yemek_kasigi: 15,
+                    tatli_kasigi: 5,
+                    cay_kasigi: 2.5,
+                    su_bardagi: 200,
+                    cay_bardagi: 110,
+                    fincan: 80
+                }
+            },
             un: {
                 name: "Un",
                 rates: {
                     gram: 1,
-                    ml: 0.6,
-                    yemek_kasigi: 10,
-                    tatli_kasigi: 5,
-                    cay_kasigi: 3,
-                    su_bardagi: 120,
-                    cay_bardagi: 80,
-                    fincan: 100
+                    ml: 1.82,
+                    yemek_kasigi: 8,
+                    tatli_kasigi: 3,
+                    cay_kasigi: 1.5,
+                    su_bardagi: 110,
+                    cay_bardagi: 65,
+                    fincan: 45
                 }
             },
-            seker: {
-                name: "Şeker (Toz)",
+            toz_seker: {
+                name: "Toz Şeker",
                 rates: {
                     gram: 1,
-                    ml: 0.85,
-                    yemek_kasigi: 12,
-                    tatli_kasigi: 6,
-                    cay_kasigi: 3,
-                    su_bardagi: 200,
-                    cay_bardagi: 100,
-                    fincan: 180
+                    ml: 1.18,
+                    yemek_kasigi: 13,
+                    tatli_kasigi: 4,
+                    cay_kasigi: 2,
+                    su_bardagi: 170,
+                    cay_bardagi: 95,
+                    fincan: 70
                 }
             },
             pirinc: {
                 name: "Pirinç",
                 rates: {
                     gram: 1,
-                    ml: 0.9,
-                    yemek_kasigi: 15,
-                    tatli_kasigi: 8,
-                    cay_kasigi: 4,
-                    su_bardagi: 200,
+                    ml: 1.25,
+                    yemek_kasigi: 12,
+                    tatli_kasigi: 4,
+                    cay_kasigi: 2,
+                    su_bardagi: 165,
+                    cay_bardagi: 90,
+                    fincan: 65
+                }
+            },
+            bulgur: {
+                name: "Bulgur",
+                rates: {
+                    gram: 1,
+                    ml: 1.33,
+                    yemek_kasigi: 11,
+                    tatli_kasigi: 4,
+                    cay_kasigi: 2,
+                    su_bardagi: 150,
+                    cay_bardagi: 85,
+                    fincan: 60
+                }
+            },
+            sivi_yag: {
+                name: "Sıvı Yağ",
+                rates: {
+                    gram: 1,
+                    ml: 1.09,
+                    yemek_kasigi: 14,
+                    tatli_kasigi: 5,
+                    cay_kasigi: 2.5,
+                    su_bardagi: 185,
                     cay_bardagi: 100,
-                    fincan: 170
+                    fincan: 75
+                }
+            },
+            su: {
+                name: "Su",
+                rates: {
+                    gram: 1,
+                    ml: 1,
+                    yemek_kasigi: 15,
+                    tatli_kasigi: 5,
+                    cay_kasigi: 2.5,
+                    su_bardagi: 200,
+                    cay_bardagi: 110,
+                    fincan: 80
                 }
             }
         }
@@ -63,7 +115,7 @@ function initAuth() {
     const authForms = document.querySelectorAll('.auth-form');
     const loginForm = document.getElementById('login-form');
     const registerForm = document.getElementById('register-form');
-    const logoutBtn = document.getElementById('logout-btn'); // Logout butonunu seç
+    const logoutBtn = document.getElementById('logout-btn');
     
     authTabs.forEach(tab => {
         tab.addEventListener('click', () => {
@@ -108,7 +160,7 @@ function initAuth() {
             document.getElementById('auth-container').style.display = 'none';
             document.querySelector('.main-container').style.display = 'block';
             document.querySelector('.subtitle').textContent = `Hoş geldin, ${user.username}!`;
-            logoutBtn.style.display = 'inline-block'; // Logout butonunu göster
+            logoutBtn.style.display = 'inline-block';
         } else {
             alert('Kullanıcı adı veya şifre hatalı!');
         }
@@ -120,17 +172,17 @@ function initAuth() {
         document.getElementById('auth-container').style.display = 'none';
         document.querySelector('.main-container').style.display = 'block';
         document.querySelector('.subtitle').textContent = `Hoş geldin, ${JSON.parse(currentUser).username}!`;
-        logoutBtn.style.display = 'inline-block'; // Logout butonunu göster
+        logoutBtn.style.display = 'inline-block';
     }
 }
 
-// Logout fonksiyonu (Yeni eklenen kısım)
+// Logout fonksiyonu
 function logout() {
-    localStorage.removeItem('currentUser'); // Mevcut kullanıcıyı kaldır
-    document.getElementById('auth-container').style.display = 'flex'; // Giriş ekranını göster
-    document.querySelector('.main-container').style.display = 'none'; // Ana ekranı gizle
-    document.querySelector('.subtitle').textContent = 'Mutfakta ölçüleri kolayca dönüştürün'; // Başlığı sıfırla
-    document.getElementById('logout-btn').style.display = 'none'; // Logout butonunu gizle
+    localStorage.removeItem('currentUser');
+    document.getElementById('auth-container').style.display = 'flex';
+    document.querySelector('.main-container').style.display = 'none';
+    document.querySelector('.subtitle').textContent = 'Mutfakta ölçüleri kolayca dönüştürün';
+    document.getElementById('logout-btn').style.display = 'none';
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -238,7 +290,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Sayfa yüklendiğinde tarifleri göster
     loadRecipes();
 
-    // Logout butonuna event listener ekle (Yeni eklenen kısım)
+    // Logout butonuna event listener ekle
     document.getElementById('logout-btn').addEventListener('click', logout);
 });
 
