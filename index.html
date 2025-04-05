@@ -8,44 +8,44 @@
 </head>
 <body>
     <div id="auth-container" class="auth-container">
-    <div class="auth-box">
-        <div class="auth-tabs">
-            <button class="auth-tab active" data-tab="login">Giriş</button>
-            <button class="auth-tab" data-tab="register">Kayıt</button>
+        <div class="auth-box">
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">Giriş</button>
+                <button class="auth-tab" data-tab="register">Kayıt</button>
+            </div>
+            <form id="login-form" class="auth-form active">
+                <div class="form-group">
+                    <input type="text" id="login-username" placeholder="Kullanıcı Adı" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="login-password" placeholder="Şifre" required>
+                </div>
+                <button type="submit" class="primary-btn">Giriş Yap</button>
+            </form>
+            <form id="register-form" class="auth-form">
+                <div class="form-group">
+                    <input type="text" id="register-username" placeholder="Kullanıcı Adı" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" id="register-password" placeholder="Şifre" required>
+                </div>
+                <div class="form-group">
+                    <select id="favorite-ingredient" required>
+                        <option value="">Favori Malzemeniz</option>
+                        <option value="sut">Süt</option>
+                        <option value="un">Un</option>
+                        <option value="toz_seker">Toz Şeker</option>
+                        <option value="pirinc">Pirinç</option>
+                        <option value="bulgur">Bulgur</option>
+                        <option value="sivi_yag">Sıvı Yağ</option>
+                        <option value="su">Su</option>
+                    </select>
+                </div>
+                <button type="submit" class="primary-btn">Kayıt Ol</button>
+            </form>
         </div>
-        <form id="login-form" class="auth-form active">
-            <div class="form-group">
-                <input type="text" id="login-username" placeholder="Kullanıcı Adı" required>
-            </div>
-            <div class="form-group">
-                <input type="password" id="login-password" placeholder="Şifre" required>
-            </div>
-            <button type="submit" class="primary-btn">Giriş Yap</button>
-        </form>
-        <form id="register-form" class="auth-form">
-            <div class="form-group">
-                <input type="text" id="register-username" placeholder="Kullanıcı Adı" required>
-            </div>
-            <div class="form-group">
-                <input type="password" id="register-password" placeholder="Şifre" required>
-            </div>
-            <div class="form-group">
-                <select id="favorite-ingredient" required>
-                    <option value="">Favori Malzemeniz</option>
-                    <option value="sut">Süt</option>
-                    <option value="un">Un</option>
-                    <option value="toz_seker">Toz Şeker</option>
-                    <option value="pirinc">Pirinç</option>
-                    <option value="bulgur">Bulgur</option>
-                    <option value="sivi_yag">Sıvı Yağ</option>
-                    <option value="su">Su</option>
-                </select>
-            </div>
-            <button type="submit" class="primary-btn">Kayıt Ol</button>
-        </form>
     </div>
-</div>
-<div class="main-container" style="display: none;">
+    <div class="main-container" style="display: none;">
         <header>
             <h1>Mutfak Ölçü Dönüştürücüsü</h1>
             <p class="subtitle">Mutfakta ölçüleri kolayca dönüştürün</p>
@@ -103,8 +103,10 @@
                                 <th>Malzeme</th>
                                 <th>1 Su Bardağı</th>
                                 <th>1 Çay Bardağı</th>
+                                <th>1 Fincan</th>
                                 <th>1 Yemek Kaşığı</th>
                                 <th>1 Tatlı Kaşığı</th>
+                                <th>1 Çay Kaşığı</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -112,50 +114,64 @@
                                 <td>Süt</td>
                                 <td>200g</td>
                                 <td>110g</td>
+                                <td>80g</td>
                                 <td>15g</td>
                                 <td>5g</td>
+                                <td>2.5g</td>
                             </tr>
                             <tr>
                                 <td>Un</td>
                                 <td>110g</td>
                                 <td>65g</td>
+                                <td>45g</td>
                                 <td>8g</td>
                                 <td>3g</td>
+                                <td>1.5g</td>
                             </tr>
                             <tr>
                                 <td>Toz Şeker</td>
                                 <td>170g</td>
                                 <td>95g</td>
+                                <td>70g</td>
                                 <td>13g</td>
                                 <td>4g</td>
+                                <td>2g</td>
                             </tr>
                             <tr>
                                 <td>Pirinç</td>
                                 <td>165g</td>
                                 <td>90g</td>
+                                <td>65g</td>
                                 <td>12g</td>
                                 <td>4g</td>
+                                <td>2g</td>
                             </tr>
                             <tr>
                                 <td>Bulgur</td>
                                 <td>150g</td>
                                 <td>85g</td>
+                                <td>60g</td>
                                 <td>11g</td>
                                 <td>4g</td>
+                                <td>2g</td>
                             </tr>
                             <tr>
                                 <td>Sıvı Yağ</td>
                                 <td>185g</td>
                                 <td>100g</td>
+                                <td>75g</td>
                                 <td>14g</td>
                                 <td>5g</td>
+                                <td>2.5g</td>
                             </tr>
                             <tr>
                                 <td>Su</td>
                                 <td>200g</td>
                                 <td>110g</td>
+                                <td>80g</td>
                                 <td>15g</td>
                                 <td>5g</td>
+                                <td>2.5g</td>
                             </tr>
                         </tbody>
                     </table>
@@ -167,7 +183,7 @@
             </div>
 
             <div id="converter" class="tab-content">
-                </div>
+            </div>
             <div id="recipes" class="tab-content active">
                 <div class="recipe-container">
                     <h2>Tarif Notlarım</h2>
@@ -224,5 +240,5 @@
     </div>
 
     <script src="script.js"></script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92bb36e7e9916a7b',t:'MTc0Mzg3ODg1MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body>
 </html>
