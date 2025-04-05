@@ -1,11 +1,11 @@
 // Firebase yapılandırması (Firebase Console’dan aldığın yapılandırmayı buraya yapıştır)
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyBb_mDuwKyWCZz6ix3k9dsN5tJzvn2BGes",
+    authDomain: "mutfak-olcu-donusturucu.firebaseapp.com",
+    projectId: "mutfak-olcu-donusturucu",
+    storageBucket: "mutfak-olcu-donusturucu.firebasestorage.app",
+    messagingSenderId: "646146532402",
+    appId: "1:646146532402:web:74116fa7414044e0c0482b"
 };
 
 // Firebase’i başlat
