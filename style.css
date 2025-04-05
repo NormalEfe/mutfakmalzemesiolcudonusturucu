@@ -1,4 +1,3 @@
-
 /* Tabs Stili */
 .tabs {
     display: flex;
@@ -149,6 +148,7 @@ header {
     padding: 3rem 2rem;
     color: white;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    position: relative; /* Logout butonu için */
 }
 
 h1 {
@@ -161,6 +161,30 @@ h1 {
 .subtitle {
     color: rgba(255,255,255,0.9);
     font-size: 1.2rem;
+}
+
+/* Logout Butonu Stili (Güncellendi) */
+#logout-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: linear-gradient(to right, #e67e22, #fd9644); /* Turuncu gradient */
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem; /* Daha küçük padding */
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem; /* Daha küçük font */
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#logout-btn:hover {
+    background: linear-gradient(to right, #d35400, #e67e22); /* Hover efekti */
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(230,126,34,0.3);
 }
 
 /* Form Stilleri */
@@ -356,6 +380,7 @@ h2::after {
     background: white;
     border-radius: 12px;
     box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    min-width: 100%; /* Tablonun taşmasını önlemek için */
 }
 
 table {
