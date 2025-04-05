@@ -1,18 +1,3 @@
-// Firebase yapılandırması (Firebase Console’dan aldığın yapılandırmayı buraya yapıştır)
-const firebaseConfig = {
-    apiKey: "*",
-    authDomain: "mutfak-olcu-donusturucu.firebaseapp.com",
-    projectId: "mutfak-olcu-donusturucu",
-    storageBucket: "mutfak-olcu-donusturucu.firebasestorage.app",
-    messagingSenderId: "646146532402",
-    appId: "1:646146532402:web:74116fa7414044e0c0482b"
-};
-
-// Firebase’i başlat
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
-
 // Kategoriler ve malzemeler
 const categories = {
     mutfak: {
@@ -124,7 +109,7 @@ const unitDisplayNames = {
     fincan: "Fincan"
 };
 
-// Auth işlemleri
+// Auth işlemleri (localStorage ile)
 function initAuth() {
     const authTabs = document.querySelectorAll('.auth-tab');
     const authForms = document.querySelectorAll('.auth-form');
@@ -145,7 +130,7 @@ function initAuth() {
         });
     });
 
-    registerBtn.addEventListener('click', async () => {
+    registerBtn.addEventListener('click', () => {
         const username = document.getElementById('register-username').value;
         const password = document.getElementById('register-password').value;
         const ingredient = document.getElementById('favorite-ingredient').value;
@@ -155,24 +140,29 @@ function initAuth() {
             return;
         }
 
-        try {
-            const email = `${username}@mutfakapp.com`;
-            const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-            const user = userCredential.user;
+        // localStorage'dan mevcut kullanıcıları al
+        const users = JSON.parse(localStorage.getItem('users')) || [];
 
-            await db.collection('users').doc(user.uid).set({
-                username: username,
-                ingredient: ingredient
-            });
-
-            alert('Kayıt başarılı! Giriş yapabilirsiniz.');
-            authTabs[0].click();
-        } catch (error) {
-            alert('Kayıt başarısız: ' + error.message);
+        // Kullanıcı adı zaten var mı kontrol et
+        if (users.some(user => user.username === username)) {
+            alert('Bu kullanıcı adı zaten alınmış!');
+            return;
         }
+
+        // Yeni kullanıcıyı ekle
+        const newUser = {
+            username: username,
+            password: password, // Not: Gerçek uygulamalarda şifreyi hash'lemek gerekir
+            ingredient: ingredient
+        };
+        users.push(newUser);
+        localStorage.setItem('users', JSON.stringify(users));
+
+        alert('Kayıt başarılı! Giriş yapabilirsiniz.');
+        authTabs[0].click();
     });
 
-    loginBtn.addEventListener('click', async () => {
+    loginBtn.addEventListener('click', () => {
         const username = document.getElementById('login-username').value;
         const password = document.getElementById('login-password').value;
 
@@ -181,64 +171,47 @@ function initAuth() {
             return;
         }
 
-        try {
-            const email = `${username}@mutfakapp.com`;
-            const userCredential = await auth.signInWithEmailAndPassword(email, password);
-            const user = userCredential.user;
+        // localStorage'dan kullanıcıları al
+        const users = JSON.parse(localStorage.getItem('users')) || [];
+        const user = users.find(u => u.username === username && u.password === password);
 
-            const userDoc = await db.collection('users').doc(user.uid).get();
-            const userData = userDoc.data();
-            const userInfo = {
-                uid: user.uid,
-                username: userData.username,
-                ingredient: userData.ingredient
-            };
-
-            localStorage.setItem('currentUser', JSON.stringify(userInfo));
-            document.getElementById('auth-container').style.display = 'none';
-            document.querySelector('.main-container').style.display = 'block';
-            document.querySelector('.subtitle').textContent = `Hoş geldin, ${userInfo.username}!`;
-            logoutBtn.style.display = 'inline-block';
-            loadRecipes();
-        } catch (error) {
-            alert('Giriş başarısız: ' + error.message);
+        if (!user) {
+            alert('Kullanıcı adı veya şifre yanlış!');
+            return;
         }
+
+        // Kullanıcıyı oturum açmış olarak işaretle
+        const userInfo = {
+            username: user.username,
+            ingredient: user.ingredient
+        };
+        localStorage.setItem('currentUser', JSON.stringify(userInfo));
+
+        document.getElementById('auth-container').style.display = 'none';
+        document.querySelector('.main-container').style.display = 'block';
+        document.querySelector('.subtitle').textContent = `Hoş geldin, ${userInfo.username}!`;
+        logoutBtn.style.display = 'inline-block';
+        loadRecipes();
     });
 
-    // Kullanıcı oturumunu kontrol et
-    auth.onAuthStateChanged(user => {
-        if (user) {
-            db.collection('users').doc(user.uid).get().then(doc => {
-                const userData = doc.data();
-                const userInfo = {
-                    uid: user.uid,
-                    username: userData.username,
-                    ingredient: userData.ingredient
-                };
-                localStorage.setItem('currentUser', JSON.stringify(userInfo));
-                document.getElementById('auth-container').style.display = 'none';
-                document.querySelector('.main-container').style.display = 'block';
-                document.querySelector('.subtitle').textContent = `Hoş geldin, ${userInfo.username}!`;
-                document.getElementById('logout-btn').style.display = 'inline-block';
-                loadRecipes();
-            }).catch(error => {
-                console.error('Kullanıcı bilgileri alınırken hata:', error);
-            });
-        }
-    });
+    // Oturum kontrolü
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    if (currentUser) {
+        document.getElementById('auth-container').style.display = 'none';
+        document.querySelector('.main-container').style.display = 'block';
+        document.querySelector('.subtitle').textContent = `Hoş geldin, ${currentUser.username}!`;
+        document.getElementById('logout-btn').style.display = 'inline-block';
+        loadRecipes();
+    }
 }
 
 // Logout fonksiyonu
 function logout() {
-    auth.signOut().then(() => {
-        localStorage.removeItem('currentUser');
-        document.getElementById('auth-container').style.display = 'flex';
-        document.querySelector('.main-container').style.display = 'none';
-        document.querySelector('.subtitle').textContent = 'Mutfakta ölçüleri kolayca dönüştürün';
-        document.getElementById('logout-btn').style.display = 'none';
-    }).catch(error => {
-        alert('Çıkış yaparken bir hata oluştu: ' + error.message);
-    });
+    localStorage.removeItem('currentUser');
+    document.getElementById('auth-container').style.display = 'flex';
+    document.querySelector('.main-container').style.display = 'none';
+    document.querySelector('.subtitle').textContent = 'Mutfakta ölçüleri kolayca dönüştürün';
+    document.getElementById('logout-btn').style.display = 'none';
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -286,7 +259,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Tarif kaydetme
     const recipeForm = document.getElementById('recipe-form');
-    recipeForm.addEventListener('submit', async function(e) {
+    recipeForm.addEventListener('submit', function(e) {
         e.preventDefault();
         
         const recipeName = document.getElementById('recipe-name').value;
@@ -310,25 +283,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const currentUser = JSON.parse(localStorage.getItem('currentUser'));
         const recipe = {
-            userId: currentUser.uid,
+            username: currentUser.username, // Kullanıcıya göre tarifleri ayırmak için
+            id: Date.now().toString(), // Benzersiz bir ID oluştur
             name: recipeName,
             description: recipeDescription,
             ingredients: ingredients,
             date: new Date().toLocaleDateString()
         };
 
-        try {
-            const docRef = await db.collection('recipes').add(recipe);
-            recipe.id = docRef.id;
-            addRecipeCard(recipe);
-            recipeForm.reset();
-            document.querySelectorAll('.ingredient-row').forEach((row, index) => {
-                if (index !== 0) row.remove();
-            });
-            alert('Tarif başarıyla kaydedildi!');
-        } catch (error) {
-            alert('Tarif kaydedilirken bir hata oluştu: ' + error.message);
-        }
+        // localStorage'dan mevcut tarifleri al
+        const recipes = JSON.parse(localStorage.getItem('recipes')) || [];
+        recipes.push(recipe);
+        localStorage.setItem('recipes', JSON.stringify(recipes));
+
+        addRecipeCard(recipe);
+        recipeForm.reset();
+        document.querySelectorAll('.ingredient-row').forEach((row, index) => {
+            if (index !== 0) row.remove();
+        });
+        alert('Tarif başarıyla kaydedildi!');
     });
 
     // Logout butonuna event listener ekle
@@ -360,32 +333,24 @@ function addRecipeCard(recipe) {
     recipesGrid.appendChild(card);
 }
 
-async function loadRecipes() {
+function loadRecipes() {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     if (!currentUser) return;
 
-    try {
-        const snapshot = await db.collection('recipes')
-            .where('userId', '==', currentUser.uid)
-            .get();
-        const recipes = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        const recipesGrid = document.querySelector('.recipes-grid');
-        recipesGrid.innerHTML = recipes.length ? '' : '<p class="no-recipes">Henüz kayıtlı tarif yok.</p>';
-        recipes.forEach(recipe => addRecipeCard(recipe));
-    } catch (error) {
-        alert('Tarifler yüklenirken bir hata oluştu: ' + error.message);
-    }
+    const recipes = JSON.parse(localStorage.getItem('recipes')) || [];
+    const userRecipes = recipes.filter(recipe => recipe.username === currentUser.username);
+    const recipesGrid = document.querySelector('.recipes-grid');
+    recipesGrid.innerHTML = userRecipes.length ? '' : '<p class="no-recipes">Henüz kayıtlı tarif yok.</p>';
+    userRecipes.forEach(recipe => addRecipeCard(recipe));
 }
 
-async function deleteRecipe(id) {
+function deleteRecipe(id) {
     if (confirm('Bu tarifi silmek istediğinizden emin misiniz?')) {
-        try {
-            await db.collection('recipes').doc(id).delete();
-            loadRecipes();
-            alert('Tarif silindi');
-        } catch (error) {
-            alert('Tarif silinirken bir hata oluştu: ' + error.message);
-        }
+        const recipes = JSON.parse(localStorage.getItem('recipes')) || [];
+        const updatedRecipes = recipes.filter(recipe => recipe.id !== id);
+        localStorage.setItem('recipes', JSON.stringify(updatedRecipes));
+        loadRecipes();
+        alert('Tarif silindi');
     }
 }
 
