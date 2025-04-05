@@ -8,9 +8,8 @@ const firebaseConfig = {
     appId: "1:646146532402:web:74116fa7414044e0c0482b"
 };
 
-// Firebase’i başlat
+// Firebase’i başlat (Yalnızca Firestore)
 firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
 const db = firebase.firestore();
 
 // Kategoriler ve malzemeler
@@ -124,7 +123,7 @@ const unitDisplayNames = {
     fincan: "Fincan"
 };
 
-// Auth işlemleri
+// Auth işlemleri (Firebase Authentication olmadan)
 function initAuth() {
     const authTabs = document.querySelectorAll('.auth-tab');
     const authForms = document.querySelectorAll('.auth-form');
@@ -148,14 +147,20 @@ function initAuth() {
         const ingredient = document.getElementById('favorite-ingredient').value;
 
         try {
-            // Firebase Authentication ile kullanıcı oluştur
-            const email = `${username}@mutfakapp.com`; // Firebase email gerektirir, username’den email oluşturuyoruz
-            const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-            const user = userCredential.user;
+            // Kullanıcı adının daha önce alınıp alınmadığını kontrol et
+            const userSnapshot = await db.collection('users')
+                .where('username', '==', username)
+                .get();
+            
+            if (!userSnapshot.empty) {
+                alert('Bu kullanıcı adı zaten kayıtlı! Lütfen başka bir kullanıcı adı seçin.');
+                return;
+            }
 
-            // Firestore’a kullanıcı bilgilerini kaydet
-            await db.collection('users').doc(user.uid).set({
+            // Yeni kullanıcıyı Firestore’a kaydet
+            const userRef = await db.collection('users').add({
                 username: username,
+                password: password, // Düz metin olarak saklanıyor (güvenli değil)
                 ingredient: ingredient
             });
 
@@ -172,15 +177,21 @@ function initAuth() {
         const password = document.getElementById('login-password').value;
 
         try {
-            const email = `${username}@mutfakapp.com`;
-            const userCredential = await auth.signInWithEmailAndPassword(email, password);
-            const user = userCredential.user;
+            // Kullanıcıyı Firestore’da ara
+            const userSnapshot = await db.collection('users')
+                .where('username', '==', username)
+                .where('password', '==', password)
+                .get();
 
-            // Firestore’dan kullanıcı bilgilerini al
-            const userDoc = await db.collection('users').doc(user.uid).get();
+            if (userSnapshot.empty) {
+                alert('Kullanıcı adı veya şifre hatalı!');
+                return;
+            }
+
+            const userDoc = userSnapshot.docs[0];
             const userData = userDoc.data();
             const userInfo = {
-                uid: user.uid,
+                id: userDoc.id,
                 username: userData.username,
                 ingredient: userData.ingredient
             };
@@ -196,38 +207,25 @@ function initAuth() {
         }
     });
 
-    // Kullanıcı oturumunu kontrol et
-    auth.onAuthStateChanged(user => {
-        if (user) {
-            db.collection('users').doc(user.uid).get().then(doc => {
-                const userData = doc.data();
-                const userInfo = {
-                    uid: user.uid,
-                    username: userData.username,
-                    ingredient: userData.ingredient
-                };
-                localStorage.setItem('currentUser', JSON.stringify(userInfo));
-                document.getElementById('auth-container').style.display = 'none';
-                document.querySelector('.main-container').style.display = 'block';
-                document.querySelector('.subtitle').textContent = `Hoş geldin, ${userInfo.username}!`;
-                document.getElementById('logout-btn').style.display = 'inline-block';
-                loadRecipes();
-            });
-        }
-    });
+    // Eğer kullanıcı zaten giriş yapmışsa
+    const currentUser = localStorage.getItem('currentUser');
+    if (currentUser) {
+        const userInfo = JSON.parse(currentUser);
+        document.getElementById('auth-container').style.display = 'none';
+        document.querySelector('.main-container').style.display = 'block';
+        document.querySelector('.subtitle').textContent = `Hoş geldin, ${userInfo.username}!`;
+        logoutBtn.style.display = 'inline-block';
+        loadRecipes();
+    }
 }
 
 // Logout fonksiyonu
 function logout() {
-    auth.signOut().then(() => {
-        localStorage.removeItem('currentUser');
-        document.getElementById('auth-container').style.display = 'flex';
-        document.querySelector('.main-container').style.display = 'none';
-        document.querySelector('.subtitle').textContent = 'Mutfakta ölçüleri kolayca dönüştürün';
-        document.getElementById('logout-btn').style.display = 'none';
-    }).catch(error => {
-        alert('Çıkış yaparken bir hata oluştu: ' + error.message);
-    });
+    localStorage.removeItem('currentUser');
+    document.getElementById('auth-container').style.display = 'flex';
+    document.querySelector('.main-container').style.display = 'none';
+    document.querySelector('.subtitle').textContent = 'Mutfakta ölçüleri kolayca dönüştürün';
+    document.getElementById('logout-btn').style.display = 'none';
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -299,7 +297,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const currentUser = JSON.parse(localStorage.getItem('currentUser'));
         const recipe = {
-            userId: currentUser.uid,
+            userId: currentUser.id,
             name: recipeName,
             description: recipeDescription,
             ingredients: ingredients,
@@ -355,7 +353,7 @@ async function loadRecipes() {
 
     try {
         const snapshot = await db.collection('recipes')
-            .where('userId', '==', currentUser.uid)
+            .where('userId', '==', currentUser.id)
             .get();
         const recipes = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         const recipesGrid = document.querySelector('.recipes-grid');
