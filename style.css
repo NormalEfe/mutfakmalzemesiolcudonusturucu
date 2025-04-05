@@ -1,26 +1,69 @@
-/* Genel Stil */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+/* Tabs Stili */
+.tabs {
+    display: flex;
+    gap: 1rem;
+    margin: 2rem 0;
+    justify-content: center;
 }
 
-body {
-    background-color: #f8f9fa;
+.tab-btn {
+    padding: 1rem 2.5rem;
+    border: none;
+    border-radius: 8px;
+    background: #f1f2f6;
     color: #2d3436;
-    line-height: 1.6;
-    min-height: 100vh;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    font-size: 1.1rem;
 }
 
-/* Renk Değişkenleri */
-:root {
-    --primary-gradient-start: #f39c12; /* Daha parlak turuncu */
-    --primary-gradient-end: #ffbb33; /* Daha canlı sarımsı turuncu */
-    --primary-hover-start: #d35400;
-    --primary-hover-end: #e67e22;
-    --secondary-color: #ff7675; /* Kırmızımsı ton (silme butonları için) */
-    --secondary-hover: #d63031;
+.tab-btn:hover {
+    background: #e1e2e6;
+    transform: translateY(-2px);
+}
+
+.tab-btn.active {
+    background: linear-gradient(to right, #e67e22, #fd9644);
+    color: white;
+    box-shadow: 0 4px 15px rgba(230,126,34,0.3);
+}
+
+.tab-content {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.tab-content.active {
+    display: block;
+    opacity: 1;
+}
+
+.calculator-container {
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    padding: 2rem;
+    margin-bottom: 3rem;
+}
+
+.recipe-form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.recipe-result {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 2px solid #f1f2f6;
+}
+
+#recipe-ingredients {
+    margin-top: 1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
 }
 
 /* Auth Stilleri */
@@ -30,21 +73,16 @@ body {
     align-items: center;
     min-height: 100vh;
     padding: 2rem;
-    background: linear-gradient(135deg, var(--primary-gradient-start), var(--primary-gradient-end));
+    background: linear-gradient(135deg, #ff7675, #e67e22);
 }
 
 .auth-box {
     background: white;
-    padding: 2.5rem;
-    border-radius: 20px;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     width: 100%;
-    max-width: 420px;
-    transition: transform 0.3s ease;
-}
-
-.auth-box:hover {
-    transform: translateY(-5px);
+    max-width: 400px;
 }
 
 .auth-tabs {
@@ -60,29 +98,95 @@ body {
     background: #f1f2f6;
     color: #2d3436;
     cursor: pointer;
-    border-radius: 10px;
+    border-radius: 8px;
     font-weight: 600;
-    transition: all 0.4s ease;
-}
-
-.auth-tab:hover {
-    background: #e1e2e6;
-    transform: translateY(-2px);
+    transition: all 0.3s ease;
 }
 
 .auth-tab.active {
-    background: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+    background: #e67e22;
     color: white;
-    box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
 }
 
-/* Form Stilleri (Auth ve Diğer Formlar) */
 .auth-form {
     display: none;
 }
 
 .auth-form.active {
     display: block;
+}
+
+/* Genel Stil */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+body {
+    background-color: #f8f9fa;
+    color: #2d3436;
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+.main-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Header Stili */
+header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding: 2rem 0;
+    border-bottom: 2px solid #e1e1e1;
+    background: linear-gradient(to right, #ff7675, #e67e22);
+    margin: -2rem -2rem 3rem -2rem;
+    padding: 3rem 2rem;
+    color: white;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    position: relative; /* Yeni eklenen: Logout butonu için konumlandırma */
+}
+
+h1 {
+    margin-bottom: 0.5rem;
+    font-size: 2.8rem;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+}
+
+.subtitle {
+    color: rgba(255,255,255,0.9);
+    font-size: 1.2rem;
+}
+
+/* Logout Butonu Stili (Yeni eklenen) */
+#logout-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.8rem 1.5rem;
+}
+
+/* Form Stilleri */
+.converter-container {
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    padding: 2rem;
+    margin-bottom: 3rem;
+    transition: transform 0.3s ease;
+}
+
+.converter-container:hover {
+    transform: translateY(-5px);
+}
+
+.converter-form {
+    margin-bottom: 2rem;
 }
 
 .form-group {
@@ -106,17 +210,15 @@ label {
     font-size: 0.95rem;
 }
 
-input,
-select,
-textarea {
+input, select {
     width: 100%;
     padding: 1rem 1.2rem;
     border: 2px solid #eee;
     border-radius: 12px;
     font-size: 1rem;
-    transition: all 0.4s ease;
+    transition: all 0.3s ease;
     background-color: #fff;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     color: #2d3436;
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -124,25 +226,21 @@ textarea {
 }
 
 select {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23f39c12' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23e67e22' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 1rem center;
     padding-right: 3rem;
 }
 
-input:hover,
-select:hover,
-textarea:hover {
-    border-color: var(--primary-gradient-start);
+input:hover, select:hover {
+    border-color: #e67e22;
     background-color: #fff9f4;
 }
 
-input:focus,
-select:focus,
-textarea:focus {
+input:focus, select:focus {
     outline: none;
-    border-color: var(--primary-gradient-start);
-    box-shadow: 0 0 0 4px rgba(243, 156, 18, 0.15);
+    border-color: #e67e22;
+    box-shadow: 0 0 0 4px rgba(230,126,34,0.15);
     background-color: #fff;
 }
 
@@ -150,179 +248,42 @@ input::placeholder {
     color: #b2bec3;
 }
 
-textarea {
-    min-height: 120px;
-    resize: vertical;
-}
-
-/* Main Container */
-.main-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem;
-}
-
-/* Header Stili */
-header {
-    text-align: center;
-    margin-bottom: 3rem;
-    padding: 3rem 2rem;
-    border-bottom: 2px solid #e1e1e1;
-    background: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
-    margin: -2rem -2rem 3rem -2rem;
-    color: white;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    position: relative;
-}
-
-h1 {
-    margin-bottom: 0.5rem;
-    font-size: 2.8rem;
-    font-weight: 700;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.subtitle {
-    color: rgba(255, 255, 255, 0.9);
-    font-size: 1.2rem;
-}
-
-/* Logout Butonu */
-#logout-btn {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    background: linear-gradient(to right, var(--secondary-color), var(--secondary-hover));
-    color: white;
-    border: none;
-    padding: 0.8rem 1.5rem;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    font-weight: 600;
-    transition: all 0.4s ease;
-}
-
-#logout-btn:hover {
-    background: linear-gradient(to right, var(--secondary-hover), var(--secondary-color));
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(214, 48, 49, 0.3);
-}
-
-/* Tabs Stili */
-.tabs {
-    display: flex;
-    gap: 1rem;
-    margin: 2rem 0;
-    justify-content: center;
-}
-
-.tab-btn {
-    padding: 1rem 2.5rem;
-    border: none;
-    border-radius: 10px;
-    background: #f1f2f6;
-    color: #2d3436;
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.4s ease;
-    font-size: 1.1rem;
-}
-
-.tab-btn:hover {
-    background: #e1e2e6;
-    transform: translateY(-2px);
-}
-
-.tab-btn.active {
-    background: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
-    color: white;
-    box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
-}
-
-.tab-content {
-    display: none;
-    opacity: 0;
-    transition: opacity 0.4s ease;
-}
-
-.tab-content.active {
-    display: block;
-    opacity: 1;
-}
-
-/* Converter ve Calculator Stilleri */
-.converter-container,
-.calculator-container {
+select option {
+    padding: 1rem;
+    font-size: 1rem;
     background-color: #fff;
-    border-radius: 20px;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
-    padding: 2.5rem;
-    margin-bottom: 3rem;
-    transition: transform 0.4s ease;
+    color: #2d3436;
 }
 
-.converter-container:hover,
-.calculator-container:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
-}
-
-.converter-form {
-    margin-bottom: 2rem;
-}
-
-/* Buton Stilleri */
 .primary-btn {
-    background: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+    background: linear-gradient(to right, #e67e22, #fd9644);
     color: white;
     border: none;
     padding: 1rem 2rem;
-    border-radius: 10px;
+    border-radius: 8px;
     cursor: pointer;
     font-size: 1rem;
     font-weight: 600;
-    transition: all 0.4s ease;
+    transition: all 0.3s ease;
     width: 100%;
     text-transform: uppercase;
     letter-spacing: 1px;
 }
 
 .primary-btn:hover {
-    background: linear-gradient(to right, var(--primary-hover-start), var(--primary-hover-end));
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(243, 156, 18, 0.3);
-}
-
-.secondary-btn {
-    background: #f1f2f6;
-    color: #2d3436;
-    border: none;
-    padding: 0.8rem 1.5rem;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    margin: 1rem 0;
-    transition: all 0.4s ease;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.secondary-btn:hover {
-    background: #e1e2e6;
+    background: linear-gradient(to right, #d35400, #e67e22);
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 5px 15px rgba(230,126,34,0.3);
 }
 
 /* Sonuç Stilleri */
 .result-container {
     background: linear-gradient(145deg, #ffffff, #f8f9fa);
-    padding: 2.5rem;
-    border-radius: 15px;
-    border-left: 4px solid var(--primary-gradient-start);
+    padding: 2rem;
+    border-radius: 12px;
+    border-left: 4px solid #e67e22;
     margin-top: 2rem;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
 }
 
 .result-cards {
@@ -335,19 +296,19 @@ h1 {
 .result-card {
     background-color: white;
     padding: 1.5rem;
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
     text-align: center;
-    transition: all 0.4s ease;
+    transition: all 0.3s ease;
 }
 
 .result-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
 }
 
 .result-card h4 {
-    color: var(--primary-gradient-start);
+    color: #e67e22;
     margin-bottom: 0.8rem;
     font-size: 1.1rem;
 }
@@ -356,6 +317,20 @@ h1 {
     font-size: 1.4rem;
     font-weight: 600;
     color: #2d3436;
+}
+
+.loading {
+    text-align: center;
+    padding: 2rem;
+    color: #666;
+    font-style: italic;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.6; }
+    50% { opacity: 1; }
+    100% { opacity: 0.6; }
 }
 
 /* Tablo Stilleri */
@@ -380,15 +355,15 @@ h2::after {
     transform: translateX(-50%);
     width: 60px;
     height: 4px;
-    background: linear-gradient(to right, var(--primary-gradient-start), var(--primary-gradient-end));
+    background: linear-gradient(to right, #e67e22, #fd9644);
     border-radius: 2px;
 }
 
 .table-container {
     overflow-x: auto;
     background: white;
-    border-radius: 15px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
 }
 
 table {
@@ -397,8 +372,7 @@ table {
     margin: 0;
 }
 
-th,
-td {
+th, td {
     padding: 1rem 1.5rem;
     text-align: left;
     border-bottom: 1px solid #f1f2f6;
@@ -414,6 +388,15 @@ tbody tr:hover {
     background-color: #fff6e6;
 }
 
+/* Footer Stili */
+footer {
+    text-align: center;
+    margin-top: 4rem;
+    padding: 2rem 0;
+    color: #636e72;
+    border-top: 1px solid #e1e1e1;
+}
+
 /* Tarif Stilleri */
 .recipe-container {
     padding: 2rem;
@@ -423,18 +406,26 @@ tbody tr:hover {
 
 .recipe-form {
     background: white;
-    padding: 2.5rem;
-    border-radius: 20px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
     margin-bottom: 3rem;
-    max-width: 600px;
-    margin: 0 auto;
 }
 
 .recipe-form h3 {
     color: #2d3436;
     margin: 1.5rem 0 1rem;
     font-size: 1.2rem;
+}
+
+#recipe-description {
+    width: 100%;
+    min-height: 100px;
+    padding: 1rem;
+    border: 2px solid #eee;
+    border-radius: 12px;
+    font-family: inherit;
+    resize: vertical;
 }
 
 .ingredient-row {
@@ -445,31 +436,51 @@ tbody tr:hover {
     align-items: center;
     background: #f8f9fa;
     padding: 1rem;
-    border-radius: 10px;
-    transition: all 0.4s ease;
+    border-radius: 8px;
+    transition: all 0.3s ease;
 }
 
 .ingredient-row:hover {
     background: #fff;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
 
 .remove-ingredient {
-    background: var(--secondary-color);
+    background: #ff7675;
     color: white;
     border: none;
-    width: 32px;
-    height: 32px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     cursor: pointer;
     font-size: 1.2rem;
     line-height: 1;
-    transition: all 0.4s ease;
+    transition: all 0.3s ease;
 }
 
 .remove-ingredient:hover {
-    background: var(--secondary-hover);
+    background: #d63031;
     transform: scale(1.1);
+}
+
+.secondary-btn {
+    background: #f1f2f6;
+    color: #2d3436;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin: 1rem 0;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.secondary-btn:hover {
+    background: #e1e2e6;
+    transform: translateY(-2px);
 }
 
 .saved-recipes {
@@ -493,13 +504,13 @@ tbody tr:hover {
     background: white;
     padding: 1.5rem;
     border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-    transition: all 0.4s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
 }
 
 .recipe-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
 }
 
 .recipe-header {
@@ -531,7 +542,7 @@ tbody tr:hover {
 .recipe-ingredients {
     background: #f8f9fa;
     padding: 1.5rem;
-    border-radius: 10px;
+    border-radius: 8px;
     margin-bottom: 1.5rem;
 }
 
@@ -560,7 +571,7 @@ tbody tr:hover {
 }
 
 .recipe-ingredients .amount {
-    color: var(--primary-gradient-start);
+    color: #e67e22;
     font-weight: 600;
 }
 
@@ -571,20 +582,18 @@ tbody tr:hover {
 }
 
 .delete-recipe {
-    background: var(--secondary-color);
+    background: #ff7675;
     color: white;
     border: none;
     padding: 0.8rem 1.5rem;
-    border-radius: 10px;
+    border-radius: 8px;
     cursor: pointer;
     font-size: 0.9rem;
-    transition: all 0.4s ease;
+    transition: all 0.3s ease;
 }
 
 .delete-recipe:hover {
-    background: var(--secondary-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(214, 48, 49, 0.3);
+    background: #d63031;
 }
 
 .no-recipes {
@@ -595,13 +604,14 @@ tbody tr:hover {
     padding: 2rem;
 }
 
-/* Footer Stili */
-footer {
-    text-align: center;
-    margin-top: 4rem;
-    padding: 2rem 0;
-    color: #636e72;
-    border-top: 1px solid #e1e1e1;
+@media (max-width: 768px) {
+    .ingredient-row {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .recipes-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* Mobil Uyumluluk */
@@ -609,50 +619,28 @@ footer {
     .main-container {
         padding: 1rem;
     }
-
+    
     header {
         margin: -1rem -1rem 2rem -1rem;
         padding: 2rem 1rem;
     }
-
+    
     h1 {
         font-size: 2rem;
     }
-
+    
     .form-row {
         flex-direction: column;
         gap: 1rem;
     }
-
+    
     .result-cards {
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
         gap: 1rem;
     }
-
-    .converter-container,
-    .result-container,
-    .recipe-form {
+    
+    .converter-container, .result-container {
         padding: 1.5rem;
-    }
-
-    .ingredient-row {
-        grid-template-columns: 1fr;
-        gap: 0.5rem;
-    }
-
-    .recipes-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .primary-btn,
-    .secondary-btn,
-    .delete-recipe {
-        padding: 0.8rem 1rem;
-        font-size: 0.9rem;
-    }
-
-    .recipe-card {
-        padding: 1rem;
     }
 }
 
@@ -660,14 +648,9 @@ footer {
     .result-cards {
         grid-template-columns: 1fr;
     }
-
-    th,
-    td {
+    
+    th, td {
         padding: 0.8rem;
         font-size: 0.9rem;
-    }
-
-    .auth-box {
-        padding: 1.5rem;
     }
 }
