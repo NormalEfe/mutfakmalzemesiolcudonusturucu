@@ -3,62 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mutfak Ölçü Dönüştürücüsü</title>
+    <title>Mutfak Malzemeleri Ölçü Hesaplama</title>
     <link rel="stylesheet" href="style.css">
+
+    <!-- Firebase App (core) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <!-- Firebase Firestore -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <!-- Firebase Auth (isteğe bağlı, kimlik doğrulama için) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 </head>
 <body>
-    <div id="auth-container" class="auth-container">
-        <div class="auth-box">
-            <div class="auth-tabs">
-                <button class="auth-tab active" data-tab="login">Giriş</button>
-                <button class="auth-tab" data-tab="register">Kayıt</button>
-            </div>
-            <form id="login-form" class="auth-form active">
-                <div class="form-group">
-                    <input type="text" id="login-username" placeholder="Kullanıcı Adı" required>
-                </div>
-                <div class="form-group">
-                    <input type="password" id="login-password" placeholder="Şifre" required>
-                </div>
-                <button type="submit" class="primary-btn">Giriş Yap</button>
-            </form>
-            <form id="register-form" class="auth-form">
-                <div class="form-group">
-                    <input type="text" id="register-username" placeholder="Kullanıcı Adı" required>
-                </div>
-                <div class="form-group">
-                    <input type="password" id="register-password" placeholder="Şifre" required>
-                </div>
-                <div class="form-group">
-                    <select id="favorite-ingredient" required>
-                        <option value="">Favori Malzemeniz</option>
-                        <option value="sut">Süt</option>
-                        <option value="un">Un</option>
-                        <option value="toz_seker">Toz Şeker</option>
-                        <option value="pirinc">Pirinç</option>
-                        <option value="bulgur">Bulgur</option>
-                        <option value="zeytin_yagi">Zeytin Yağı</option>
-                        <option value="aycicek_yagi">Ayçiçek Yağı</option>
-                        <option value="su">Su</option>
-                        <option value="tereyagi">Tereyağı</option>
-                        <option value="yogurt">Yoğurt</option>
-                    </select>
-                </div>
-                <button type="submit" class="primary-btn">Kayıt Ol</button>
-            </form>
-        </div>
-    </div>
-    <div class="main-container" style="display: none;">
-        <header>
-            <h1>Mutfak Ölçü Dönüştürücüsü</h1>
-            <p class="subtitle">Mutfakta ölçüleri kolayca dönüştürün</p>
-            <button id="logout-btn" style="display: none;">Hesaptan Çık</button>
-        </header>
+    <header>
+        <h1>Mutfak Malzemeleri Ölçü Hesaplama</h1>
+        <p class="subtitle">Mutfakta ölçüleri kolayca dönüştürün</p>
+        <button id="logout-btn" style="display: none;">Çıkış Yap</button>
+    </header>
 
-        <main class="converter-container">
-            <div class="converter-form">
+    <div id="auth-container">
+        <div class="auth-tabs">
+            <button class="auth-tab active" data-tab="login">Giriş Yap</button>
+            <button class="auth-tab" data-tab="register">Kayıt Ol</button>
+        </div>
+        <form id="login-form" class="auth-form active">
+            <div class="form-group">
+                <label for="login-username">Kullanıcı Adı:</label>
+                <input type="text" id="login-username" required>
+            </div>
+            <div class="form-group">
+                <label for="login-password">Şifre:</label>
+                <input type="password" id="login-password" required>
+            </div>
+            <button type="submit">Giriş Yap</button>
+        </form>
+        <form id="register-form" class="auth-form">
+            <div class="form-group">
+                <label for="register-username">Kullanıcı Adı:</label>
+                <input type="text" id="register-username" required>
+            </div>
+            <div class="form-group">
+                <label for="register-password">Şifre:</label>
+                <input type="password" id="register-password" required>
+            </div>
+            <div class="form-group">
+                <label for="favorite-ingredient">Favori Malzemeniz:</label>
+                <input type="text" id="favorite-ingredient" required>
+            </div>
+            <button type="submit">Kayıt Ol</button>
+        </form>
+    </div>
+
+    <div class="main-container" style="display: none;">
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="converter">Dönüştürücü</button>
+            <button class="tab-btn" data-tab="tables">Çeviri Tabloları</button>
+            <button class="tab-btn" data-tab="recipes">Tarifler</button>
+        </div>
+
+        <div id="converter" class="tab-content active">
+            <div class="converter-container">
+                <h2>Ölçü Dönüştürücü</h2>
                 <div class="form-group">
-                    <label for="category">Mutfak Malzemeleri Kategorisi:</label>
+                    <label for="category">Kategori:</label>
                     <select id="category">
                         <option value="sivi_malzemeler">Sıvı Malzemeler</option>
                         <option value="kati_malzemeler">Katı Malzemeler</option>
@@ -66,142 +72,109 @@
                 </div>
                 <div class="form-group">
                     <label for="ingredient">Malzeme:</label>
-                    <select id="ingredient">
+                    <select id="ingredient"></select>
+                </div>
+                <div class="form-group">
+                    <label for="amount">Miktar:</label>
+                    <input type="number" id="amount" step="any" required>
+                </div>
+                <div class="form-group">
+                    <label for="input-unit">Birim:</label>
+                    <select id="input-unit">
+                        <option value="gram">Gram</option>
+                        <option value="ml">Mililitre</option>
+                        <option value="su_bardagi">Su Bardağı</option>
+                        <option value="cay_bardagi">Çay Bardağı</option>
+                        <option value="fincan">Fincan</option>
+                        <option value="yemek_kasigi">Yemek Kaşığı</option>
+                        <option value="tatli_kasigi">Tatlı Kaşığı</option>
+                        <option value="cay_kasigi">Çay Kaşığı</option>
                     </select>
                 </div>
+                <button id="convert-btn">Dönüştür</button>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="amount">Miktar:</label>
-                        <input type="number" id="amount" min="0" step="0.1" placeholder="Ör. 300">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="input-unit">Birim:</label>
-                        <select id="input-unit">
-                            <option value="gram">Gram</option>
-                            <option value="ml">Mililitre</option>
-                            <option value="yemek_kasigi">Yemek Kaşığı</option>
-                            <option value="tatli_kasigi">Tatlı Kaşığı</option>
-                            <option value="cay_kasigi">Çay Kaşığı</option>
-                            <option value="su_bardagi">Su Bardağı</option>
-                            <option value="cay_bardagi">Çay Bardağı</option>
-                            <option value="fincan">Fincan</option>
-                        </select>
-                    </div>
-                </div>
-
-                <button id="convert-btn" class="primary-btn">Dönüştür</button>
-            </div>
-
-            <div id="result" class="result-container" style="display: none;">
-                <h3>Dönüştürme Sonuçları:</h3>
-                <div id="result-cards" class="result-cards"></div>
-            </div>
-
-            <div class="info-section">
-                <div class="info-header">
-                    <center><h2>Malzeme Dönüşüm Tablosu</h2></center>
-                </div>
-                <div class="table-container">
-                    <h3>Sıvı Malzemeler</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Malzeme</th>
-                                <th>1 Su Bardağı</th>
-                                <th>1 Çay Bardağı</th>
-                                <th>1 Fincan</th>
-                                <th>1 Yemek Kaşığı</th>
-                                <th>1 Tatlı Kaşığı</th>
-                                <th>1 Çay Kaşığı</th>
-                            </tr>
-                        </thead>
-                        <tbody id="sivi-conversion-table-body">
-                            <!-- Sıvı malzemeler buraya eklenecek -->
-                        </tbody>
-                    </table>
-                </div>
-                <div class="table-container">
-                    <h3>Katı Malzemeler</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Malzeme</th>
-                                <th>1 Su Bardağı</th>
-                                <th>1 Çay Bardağı</th>
-                                <th>1 Fincan</th>
-                                <th>1 Yemek Kaşığı</th>
-                                <th>1 Tatlı Kaşığı</th>
-                                <th>1 Çay Kaşığı</th>
-                            </tr>
-                        </thead>
-                        <tbody id="kati-conversion-table-body">
-                            <!-- Katı malzemeler buraya eklenecek -->
-                        </tbody>
-                    </table>
+                <div id="result" style="display: none;">
+                    <h3>Sonuçlar</h3>
+                    <div id="result-cards" class="result-cards"></div>
                 </div>
             </div>
-            <div class="tabs">
-                <button class="tab-btn" data-tab="converter">Dönüştürücü</button>
-                <button class="tab-btn" data-tab="recipes">Tariflerim</button>
-            </div>
+        </div>
 
-            <div id="converter" class="tab-content">
-            </div>
-            <div id="recipes" class="tab-content active">
-                <div class="recipe-container">
-                    <h2>Tarif Notlarım</h2>
-                    <form id="recipe-form" class="recipe-form">
+        <div id="tables" class="tab-content">
+            <h2>Çeviri Tabloları</h2>
+            <h3>Sıvı Malzemeler</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Malzeme</th>
+                        <th>Su Bardağı (200 mL)</th>
+                        <th>Çay Bardağı (110 mL)</th>
+                        <th>Fincan (80 mL)</th>
+                        <th>Yemek Kaşığı (15 mL)</th>
+                        <th>Tatlı Kaşığı (5 mL)</th>
+                        <th>Çay Kaşığı (2.5 mL)</th>
+                    </tr>
+                </thead>
+                <tbody id="sivi-conversion-table-body"></tbody>
+            </table>
+
+            <h3>Katı Malzemeler</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Malzeme</th>
+                        <th>Su Bardağı</th>
+                        <th>Çay Bardağı</th>
+                        <th>Fincan</th>
+                        <th>Yemek Kaşığı</th>
+                        <th>Tatlı Kaşığı</th>
+                        <th>Çay Kaşığı</th>
+                    </tr>
+                </thead>
+                <tbody id="kati-conversion-table-body"></tbody>
+            </table>
+        </div>
+
+        <div id="recipes" class="tab-content">
+            <h2>Tarifler</h2>
+            <form id="recipe-form">
+                <div class="form-group">
+                    <label for="recipe-name">Tarif Adı:</label>
+                    <input type="text" id="recipe-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="recipe-description">Açıklama (Opsiyonel):</label>
+                    <textarea id="recipe-description"></textarea>
+                </div>
+                <div id="ingredients-container">
+                    <div class="ingredient-row">
                         <div class="form-group">
-                            <label for="recipe-name">Tarif Adı:</label>
-                            <input type="text" id="recipe-name" required placeholder="Örn: Çikolatalı Kek">
+                            <input type="text" class="ingredient-name" required placeholder="Malzeme adı">
                         </div>
                         <div class="form-group">
-                            <label for="recipe-description">Tarif Açıklaması:</label>
-                            <textarea id="recipe-description" placeholder="Tarifiniz hakkında kısa bir açıklama"></textarea>
+                            <input type="number" class="ingredient-amount" required placeholder="Miktar">
                         </div>
-                        <div id="ingredients-container">
-                            <h3>Malzemeler</h3>
-                            <div class="ingredient-row">
-                                <div class="form-group">
-                                    <input type="text" class="ingredient-name" required placeholder="Malzeme adı">
-                                </div>
-                                <div class="form-group">
-                                    <input type="number" class="ingredient-amount" required placeholder="Miktar">
-                                </div>
-                                <div class="form-group">
-                                    <select class="ingredient-unit">
-                                        <option value="gram">Gram</option>
-                                        <option value="ml">Mililitre</option>
-                                        <option value="adet">Adet</option>
-                                        <option value="yemek_kasigi">Yemek Kaşığı</option>
-                                        <option value="tatli_kasigi">Tatlı Kaşığı</option>
-                                        <option value="cay_kasigi">Çay Kaşığı</option>
-                                        <option value="su_bardagi">Su Bardağı</option>
-                                        <option value="cay_bardagi">Çay Bardağı</option>
-                                    </select>
-                                </div>
-                                <button type="button" class="remove-ingredient" title="Malzemeyi Sil">×</button>
-                            </div>
+                        <div class="form-group">
+                            <select class="ingredient-unit">
+                                <option value="gram">Gram</option>
+                                <option value="ml">Mililitre</option>
+                                <option value="adet">Adet</option>
+                                <option value="yemek_kasigi">Yemek Kaşığı</option>
+                                <option value="tatli_kasigi">Tatlı Kaşığı</option>
+                                <option value="cay_kasigi">Çay Kaşığı</option>
+                                <option value="su_bardagi">Su Bardağı</option>
+                                <option value="cay_bardagi">Çay Bardağı</option>
+                            </select>
                         </div>
-                        <button type="button" id="add-ingredient" class="secondary-btn">+ Yeni Malzeme Ekle</button>
-                        <button type="submit" class="primary-btn">Tarifi Kaydet</button>
-                    </form>
-
-                    <div id="saved-recipes" class="saved-recipes">
-                        <h3>Kayıtlı Tariflerim</h3>
-                        <div class="recipes-grid">
-                            <!-- Kaydedilen tarifler buraya eklenecek -->
-                        </div>
+                        <button type="button" class="remove-ingredient" title="Malzemeyi Sil">×</button>
                     </div>
                 </div>
-            </div>
-        </main>
+                <button type="button" id="add-ingredient">+ Malzeme Ekle</button>
+                <button type="submit">Tarifi Kaydet</button>
+            </form>
 
-        <footer>
-            <p>© 2025 Mutfak Ölçü Dönüştürücüsü | Tüm Hakları Saklıdır</p>
-        </footer>
+            <div class="recipes-grid"></div>
+        </div>
     </div>
 
     <script src="script.js"></script>
