@@ -1,5 +1,10 @@
 // Firebase'i başlat (config.js dosyasından firebaseConfig otomatik olarak gelir)
-firebase.initializeApp(firebaseConfig);
+try {
+    firebase.initializeApp(firebaseConfig);
+    console.log("Firebase başarıyla başlatıldı.");
+} catch (error) {
+    console.error("Firebase başlatılamadı:", error);
+}
 
 // Firestore'a erişim
 const db = firebase.firestore();
@@ -213,8 +218,12 @@ function initAuth() {
     const registerForm = document.getElementById('register-form');
     const logoutBtn = document.getElementById('logout-btn');
 
+    console.log("initAuth fonksiyonu çağrıldı."); // Hata ayıklama için log
+
+    // Sekme değiştirme
     authTabs.forEach(tab => {
         tab.addEventListener('click', () => {
+            console.log(`${tab.dataset.tab} sekmesine tıklandı.`); // Hata ayıklama için log
             authTabs.forEach(t => t.classList.remove('active'));
             authForms.forEach(f => f.classList.remove('active'));
             tab.classList.add('active');
@@ -222,29 +231,32 @@ function initAuth() {
         });
     });
 
+    // Kayıt işlemi
     registerForm.addEventListener('submit', (e) => {
         e.preventDefault();
+        console.log("Kayıt formu gönderildi."); // Hata ayıklama için log
         const username = document.getElementById('register-username').value;
         const password = document.getElementById('register-password').value;
         const email = `${username}@mutfakapp.com`;
 
         firebase.auth().createUserWithEmailAndPassword(email, password)
             .then((userCredential) => {
+                console.log("Kullanıcı Authentication'a kaydedildi:", userCredential.user.email); // Hata ayıklama için log
                 const user = userCredential.user;
-                // Kullanıcıyı Authentication'da güncelle
                 return user.updateProfile({ displayName: username });
             })
             .then(() => {
-                // Firestore'da kullanıcı kaydını oluştur
                 const userData = {
                     username: username,
                     email: email,
                     createdAt: new Date().toISOString(),
                     favoriteIngredient: document.getElementById('favorite-ingredient').value
                 };
+                console.log("Firestore'a kullanıcı verisi kaydediliyor:", userData); // Hata ayıklama için log
                 return db.collection('users').doc(username).set(userData);
             })
             .then(() => {
+                console.log("Firestore'a kullanıcı verisi başarıyla kaydedildi."); // Hata ayıklama için log
                 alert('Kayıt başarılı! Giriş yapabilirsiniz.');
                 authTabs[0].click();
             })
@@ -254,14 +266,17 @@ function initAuth() {
             });
     });
 
+    // Giriş işlemi
     loginForm.addEventListener('submit', (e) => {
         e.preventDefault();
+        console.log("Giriş formu gönderildi."); // Hata ayıklama için log
         const username = document.getElementById('login-username').value;
         const password = document.getElementById('login-password').value;
         const email = `${username}@mutfakapp.com`;
 
         firebase.auth().signInWithEmailAndPassword(email, password)
             .then((userCredential) => {
+                console.log("Kullanıcı giriş yaptı:", userCredential.user.email); // Hata ayıklama için log
                 const user = userCredential.user;
                 localStorage.setItem('currentUser', JSON.stringify({ username: user.displayName }));
                 document.getElementById('auth-container').style.display = 'none';
@@ -275,8 +290,10 @@ function initAuth() {
             });
     });
 
+    // Kullanıcı durumu dinleme
     firebase.auth().onAuthStateChanged((user) => {
         if (user) {
+            console.log("Kullanıcı oturumu açık:", user.email); // Hata ayıklama için log
             localStorage.setItem('currentUser', JSON.stringify({ username: user.displayName }));
             document.getElementById('auth-container').style.display = 'none';
             document.querySelector('.main-container').style.display = 'block';
@@ -290,14 +307,17 @@ function initAuth() {
                         const userData = doc.data();
                         console.log('Kullanıcı Bilgileri:', userData);
                         document.querySelector('.subtitle').textContent += ` Favori Malzemen: ${userData.favoriteIngredient}`;
+                    } else {
+                        console.log("Firestore'da kullanıcı verisi bulunamadı.");
                     }
                 })
                 .catch((err) => {
                     console.error('Kullanıcı bilgileri alınamadı:', err);
                 });
 
-            loadRecipes(); // Tarifleri yükle
+            loadRecipes();
         } else {
+            console.log("Kullanıcı oturumu kapalı."); // Hata ayıklama için log
             localStorage.removeItem('currentUser');
             document.getElementById('auth-container').style.display = 'flex';
             document.querySelector('.main-container').style.display = 'none';
@@ -307,8 +327,10 @@ function initAuth() {
     });
 
     logoutBtn.addEventListener('click', () => {
+        console.log("Çıkış yap butonuna tıklandı."); // Hata ayıklama için log
         firebase.auth().signOut()
             .then(() => {
+                console.log("Kullanıcı çıkış yaptı."); // Hata ayıklama için log
                 localStorage.removeItem('currentUser');
             })
             .catch((err) => {
@@ -342,9 +364,8 @@ function initTabs() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Tabloyu güncelle
+    console.log("DOM yüklendi, uygulamayı başlatıyorum."); // Hata ayıklama için log
     updateTable();
-
     initAuth();
     initTabs();
 
@@ -417,12 +438,13 @@ document.addEventListener('DOMContentLoaded', function() {
         db.collection('recipes')
             .add(recipe)
             .then(() => {
+                console.log("Tarif Firestore'a kaydedildi:", recipe); // Hata ayıklama için log
                 alert('Tarif başarıyla kaydedildi!');
                 recipeForm.reset();
                 document.querySelectorAll('.ingredient-row').forEach((row, index) => {
                     if (index !== 0) row.remove();
                 });
-                loadRecipes(); // Tarifleri yeniden yükle
+                loadRecipes();
             })
             .catch((err) => {
                 console.error('Tarif kaydedilemedi:', err);
@@ -458,7 +480,7 @@ function addRecipeCard(recipe) {
 
 function loadRecipes() {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    if (!currentUser) return; // Kullanıcı giriş yapmamışsa yükleme yapma
+    if (!currentUser) return;
     const recipesGrid = document.querySelector('.recipes-grid');
     recipesGrid.innerHTML = '<p class="no-recipes">Yükleniyor...</p>';
 
@@ -469,7 +491,7 @@ function loadRecipes() {
             recipesGrid.innerHTML = querySnapshot.empty ? '<p class="no-recipes">Henüz kayıtlı tarif yok.</p>' : '';
             querySnapshot.forEach((doc) => {
                 const recipe = doc.data();
-                recipe.id = doc.id; // Firestore belge ID'sini ekle
+                recipe.id = doc.id;
                 addRecipeCard(recipe);
             });
         })
@@ -486,7 +508,7 @@ function deleteRecipe(id) {
             .delete()
             .then(() => {
                 alert('Tarif başarıyla silindi.');
-                loadRecipes(); // Tarifleri yeniden yükle
+                loadRecipes();
             })
             .catch((err) => {
                 console.error('Tarif silinemedi:', err);
@@ -556,21 +578,18 @@ function convertMeasurements() {
     const rates = ingredient.rates;
     let baseValue;
 
-    // Sıvı malzemeler için yoğunluk kullanarak dönüşüm
     if (categoryId === 'sivi_malzemeler') {
         const density = ingredient.density;
         if (inputUnit === 'gram') {
-            baseValue = amount; // Gram zaten temel birim
+            baseValue = amount;
         } else if (inputUnit === 'ml') {
-            baseValue = parseFloat((amount * density).toFixed(2)); // mL'yi gram'a çevir: mL * yoğunluk
+            baseValue = parseFloat((amount * density).toFixed(2));
         } else {
-            // Diğer birimler için önce mL'ye çevir, sonra gram'a
-            const mlPerUnit = parseFloat((rates[inputUnit] / density).toFixed(2)); // Örneğin, 1 su bardağı süt: 206 g / 1.03 = 200 mL
+            const mlPerUnit = parseFloat((rates[inputUnit] / density).toFixed(2));
             const totalMl = parseFloat((amount * mlPerUnit).toFixed(2));
-            baseValue = parseFloat((totalMl * density).toFixed(2)); // Gram = mL * yoğunluk
+            baseValue = parseFloat((totalMl * density).toFixed(2));
         }
     } else {
-        // Katı malzemeler için mevcut mantığı kullan
         if (inputUnit === 'gram' || inputUnit === 'ml') {
             baseValue = amount;
         } else {
@@ -585,19 +604,17 @@ function convertMeasurements() {
         if (unit !== inputUnit) {
             let result;
             if (categoryId === 'sivi_malzemeler') {
-                // Sıvılar için: önce gram'ı mL'ye çevir, sonra hedef birime
                 const density = ingredient.density;
-                const totalMl = parseFloat((baseValue / density).toFixed(2)); // Gram'ı mL'ye çevir
+                const totalMl = parseFloat((baseValue / density).toFixed(2));
                 if (unit === 'gram') {
                     result = baseValue;
                 } else if (unit === 'ml') {
                     result = totalMl;
                 } else {
-                    const mlPerUnit = parseFloat((rates[unit] / density).toFixed(2)); // Örneğin, 1 yemek kaşığı süt: 15.45 g / 1.03 = 15 mL
+                    const mlPerUnit = parseFloat((rates[unit] / density).toFixed(2));
                     result = parseFloat((totalMl / mlPerUnit).toFixed(2));
                 }
             } else {
-                // Katı malzemeler için mevcut mantık
                 result = parseFloat((baseValue / rates[unit]).toFixed(2));
             }
 
