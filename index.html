@@ -37,8 +37,11 @@
                         <option value="toz_seker">Toz Şeker</option>
                         <option value="pirinc">Pirinç</option>
                         <option value="bulgur">Bulgur</option>
-                        <option value="sivi_yag">Sıvı Yağ</option>
+                        <option value="zeytin_yagi">Zeytin Yağı</option>
+                        <option value="aycicek_yagi">Ayçiçek Yağı</option>
                         <option value="su">Su</option>
+                        <option value="tereyagi">Tereyağı</option>
+                        <option value="yogurt">Yoğurt</option>
                     </select>
                 </div>
                 <button type="submit" class="primary-btn">Kayıt Ol</button>
@@ -55,8 +58,10 @@
         <main class="converter-container">
             <div class="converter-form">
                 <div class="form-group">
-                    <label for="category">Kategori:</label>
+                    <label for="category">Mutfak Malzemeleri Kategorisi:</label>
                     <select id="category">
+                        <option value="sivi_malzemeler">Sıvı Malzemeler</option>
+                        <option value="kati_malzemeler">Katı Malzemeler</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -95,8 +100,11 @@
             </div>
 
             <div class="info-section">
-                <h2>Malzeme Dönüşüm Tablosu</h2>
+                <div class="info-header">
+                    <h2>Malzeme Dönüşüm Tablosu</h2>
+                </div>
                 <div class="table-container">
+                    <h3>Sıvı Malzemeler</h3>
                     <table>
                         <thead>
                             <tr>
@@ -109,70 +117,27 @@
                                 <th>1 Çay Kaşığı</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="sivi-conversion-table-body">
+                            <!-- Sıvı malzemeler buraya eklenecek -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="table-container">
+                    <h3>Katı Malzemeler</h3>
+                    <table>
+                        <thead>
                             <tr>
-                                <td>Süt</td>
-                                <td>200g</td>
-                                <td>110g</td>
-                                <td>80g</td>
-                                <td>15g</td>
-                                <td>5g</td>
-                                <td>2.5g</td>
+                                <th>Malzeme</th>
+                                <th>1 Su Bardağı</th>
+                                <th>1 Çay Bardağı</th>
+                                <th>1 Fincan</th>
+                                <th>1 Yemek Kaşığı</th>
+                                <th>1 Tatlı Kaşığı</th>
+                                <th>1 Çay Kaşığı</th>
                             </tr>
-                            <tr>
-                                <td>Un</td>
-                                <td>110g</td>
-                                <td>65g</td>
-                                <td>45g</td>
-                                <td>8g</td>
-                                <td>3g</td>
-                                <td>1.5g</td>
-                            </tr>
-                            <tr>
-                                <td>Toz Şeker</td>
-                                <td>170g</td>
-                                <td>95g</td>
-                                <td>70g</td>
-                                <td>13g</td>
-                                <td>4g</td>
-                                <td>2g</td>
-                            </tr>
-                            <tr>
-                                <td>Pirinç</td>
-                                <td>165g</td>
-                                <td>90g</td>
-                                <td>65g</td>
-                                <td>12g</td>
-                                <td>4g</td>
-                                <td>2g</td>
-                            </tr>
-                            <tr>
-                                <td>Bulgur</td>
-                                <td>150g</td>
-                                <td>85g</td>
-                                <td>60g</td>
-                                <td>11g</td>
-                                <td>4g</td>
-                                <td>2g</td>
-                            </tr>
-                            <tr>
-                                <td>Sıvı Yağ</td>
-                                <td>185g</td>
-                                <td>100g</td>
-                                <td>75g</td>
-                                <td>14g</td>
-                                <td>5g</td>
-                                <td>2.5g</td>
-                            </tr>
-                            <tr>
-                                <td>Su</td>
-                                <td>200g</td>
-                                <td>110g</td>
-                                <td>80g</td>
-                                <td>15g</td>
-                                <td>5g</td>
-                                <td>2.5g</td>
-                            </tr>
+                        </thead>
+                        <tbody id="kati-conversion-table-body">
+                            <!-- Katı malzemeler buraya eklenecek -->
                         </tbody>
                     </table>
                 </div>
