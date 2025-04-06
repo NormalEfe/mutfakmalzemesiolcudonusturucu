@@ -1,103 +1,4 @@
-// Kategoriler ve malzemeler (Güncellenmiş hali)
-const categories = {
-    mutfak: {
-        name: "Mutfak Malzemeleri",
-        items: {
-            sut: {
-                name: "Süt",
-                rates: {
-                    gram: 1,
-                    ml: 1,
-                    yemek_kasigi: 15,
-                    tatli_kasigi: 5,
-                    cay_kasigi: 2.5,
-                    su_bardagi: 200,
-                    cay_bardagi: 110,
-                    fincan: 80
-                }
-            },
-            un: {
-                name: "Un",
-                rates: {
-                    gram: 1,
-                    ml: 1.82,
-                    yemek_kasigi: 8,
-                    tatli_kasigi: 3,
-                    cay_kasigi: 1.5,
-                    su_bardagi: 110,
-                    cay_bardagi: 65,
-                    fincan: 45
-                }
-            },
-            toz_seker: {
-                name: "Toz Şeker",
-                rates: {
-                    gram: 1,
-                    ml: 1.18,
-                    yemek_kasigi: 13,
-                    tatli_kasigi: 4,
-                    cay_kasigi: 2,
-                    su_bardagi: 170,
-                    cay_bardagi: 95,
-                    fincan: 70
-                }
-            },
-            pirinc: {
-                name: "Pirinç",
-                rates: {
-                    gram: 1,
-                    ml: 1.25,
-                    yemek_kasigi: 12,
-                    tatli_kasigi: 4,
-                    cay_kasigi: 2,
-                    su_bardagi: 165,
-                    cay_bardagi: 90,
-                    fincan: 65
-                }
-            },
-            bulgur: {
-                name: "Bulgur",
-                rates: {
-                    gram: 1,
-                    ml: 1.33,
-                    yemek_kasigi: 11,
-                    tatli_kasigi: 4,
-                    cay_kasigi: 2,
-                    su_bardagi: 150,
-                    cay_bardagi: 85,
-                    fincan: 60
-                }
-            },
-            sivi_yag: {
-                name: "Sıvı Yağ",
-                rates: {
-                    gram: 1,
-                    ml: 1.09,
-                    yemek_kasigi: 14,
-                    tatli_kasigi: 5,
-                    cay_kasigi: 2.5,
-                    su_bardagi: 185,
-                    cay_bardagi: 100,
-                    fincan: 75
-                }
-            },
-            su: {
-                name: "Su",
-                rates: {
-                    gram: 1,
-                    ml: 1,
-                    yemek_kasigi: 15,
-                    tatli_kasigi: 5,
-                    cay_kasigi: 2.5,
-                    su_bardagi: 200,
-                    cay_bardagi: 110,
-                    fincan: 80
-                }
-            }
-        }
-    }
-};
-
+// Birimlerin gösterim isimleri
 const unitDisplayNames = {
     gram: "Gram",
     ml: "Mililitre",
@@ -109,6 +10,195 @@ const unitDisplayNames = {
     fincan: "Fincan"
 };
 
+// Kategorilere göre malzemeleri tanımla (rates değerlerini baştan yuvarlayalım)
+const categories = {
+    sivi_malzemeler: {
+        name: "Sıvı Malzemeler",
+        items: {
+            sut: {
+                name: "Süt",
+                density: 1.03, // g/mL
+                rates: {
+                    gram: 1,
+                    ml: 1,
+                    su_bardagi: parseFloat((200 * 1.03).toFixed(2)), // 206 g
+                    cay_bardagi: parseFloat((110 * 1.03).toFixed(2)), // 113.3 g
+                    fincan: parseFloat((80 * 1.03).toFixed(2)), // 82.4 g
+                    yemek_kasigi: parseFloat((15 * 1.03).toFixed(2)), // 15.45 g
+                    tatli_kasigi: parseFloat((5 * 1.03).toFixed(2)), // 5.15 g
+                    cay_kasigi: parseFloat((2.5 * 1.03).toFixed(2)) // 2.58 g
+                }
+            },
+            zeytin_yagi: {
+                name: "Zeytin Yağı",
+                density: 0.92, // g/mL
+                rates: {
+                    gram: 1,
+                    ml: 1,
+                    su_bardagi: parseFloat((200 * 0.92).toFixed(2)), // 184 g
+                    cay_bardagi: parseFloat((110 * 0.92).toFixed(2)), // 101.2 g
+                    fincan: parseFloat((80 * 0.92).toFixed(2)), // 73.6 g
+                    yemek_kasigi: parseFloat((15 * 0.92).toFixed(2)), // 13.8 g
+                    tatli_kasigi: parseFloat((5 * 0.92).toFixed(2)), // 4.6 g
+                    cay_kasigi: parseFloat((2.5 * 0.92).toFixed(2)) // 2.3 g
+                }
+            },
+            aycicek_yagi: {
+                name: "Ayçiçek Yağı",
+                density: 0.92, // g/mL
+                rates: {
+                    gram: 1,
+                    ml: 1,
+                    su_bardagi: parseFloat((200 * 0.92).toFixed(2)), // 184 g
+                    cay_bardagi: parseFloat((110 * 0.92).toFixed(2)), // 101.2 g
+                    fincan: parseFloat((80 * 0.92).toFixed(2)), // 73.6 g
+                    yemek_kasigi: parseFloat((15 * 0.92).toFixed(2)), // 13.8 g
+                    tatli_kasigi: parseFloat((5 * 0.92).toFixed(2)), // 4.6 g
+                    cay_kasigi: parseFloat((2.5 * 0.92).toFixed(2)) // 2.3 g
+                }
+            },
+            su: {
+                name: "Su",
+                density: 1.0, // g/mL
+                rates: {
+                    gram: 1,
+                    ml: 1,
+                    su_bardagi: parseFloat((200 * 1.0).toFixed(2)), // 200 g
+                    cay_bardagi: parseFloat((110 * 1.0).toFixed(2)), // 110 g
+                    fincan: parseFloat((80 * 1.0).toFixed(2)), // 80 g
+                    yemek_kasigi: parseFloat((15 * 1.0).toFixed(2)), // 15 g
+                    tatli_kasigi: parseFloat((5 * 1.0).toFixed(2)), // 5 g
+                    cay_kasigi: parseFloat((2.5 * 1.0).toFixed(2)) // 2.5 g
+                }
+            },
+            yogurt: {
+                name: "Yoğurt",
+                density: 1.04, // g/mL
+                rates: {
+                    gram: 1,
+                    ml: 1,
+                    su_bardagi: parseFloat((200 * 1.04).toFixed(2)), // 208 g
+                    cay_bardagi: parseFloat((110 * 1.04).toFixed(2)), // 114.4 g
+                    fincan: parseFloat((80 * 1.04).toFixed(2)), // 83.2 g
+                    yemek_kasigi: parseFloat((15 * 1.04).toFixed(2)), // 15.6 g
+                    tatli_kasigi: parseFloat((5 * 1.04).toFixed(2)), // 5.2 g
+                    cay_kasigi: parseFloat((2.5 * 1.04).toFixed(2)) // 2.6 g
+                }
+            }
+        }
+    },
+    kati_malzemeler: {
+        name: "Katı Malzemeler",
+        items: {
+            un: {
+                name: "Un",
+                rates: {
+                    gram: 1,
+                    ml: 1,
+                    su_bardagi: 120,
+                    cay_bardagi: 66,
+                    fincan: 48,
+                    yemek_kasigi: 9,
+                    tatli_kasigi: 3,
+                    cay_kasigi: 1.5
+                }
+            },
+            toz_seker: {
+                name: "Toz Şeker",
+                rates: {
+                    gram: 1,
+                    ml: 1,
+                    su_bardagi: 175,
+                    cay_bardagi: 96.25,
+                    fincan: 70,
+                    yemek_kasigi: 13.125,
+                    tatli_kasigi: 4.375,
+                    cay_kasigi: 2.1875
+                }
+            },
+            pirinc: {
+                name: "Pirinç",
+                rates: {
+                    gram: 1,
+                    ml: 1,
+                    su_bardagi: 165,
+                    cay_bardagi: 90.75,
+                    fincan: 66,
+                    yemek_kasigi: 12.375,
+                    tatli_kasigi: 4.125,
+                    cay_kasigi: 2.0625
+                }
+            },
+            bulgur: {
+                name: "Bulgur",
+                rates: {
+                    gram: 1,
+                    ml: 1,
+                    su_bardagi: 150,
+                    cay_bardagi: 82.5,
+                    fincan: 60,
+                    yemek_kasigi: 11.25,
+                    tatli_kasigi: 3.75,
+                    cay_kasigi: 1.875
+                }
+            },
+            tereyagi: {
+                name: "Tereyağı",
+                rates: {
+                    gram: 1,
+                    ml: 1,
+                    su_bardagi: 225,
+                    cay_bardagi: 123.75,
+                    fincan: 90,
+                    yemek_kasigi: 16.875,
+                    tatli_kasigi: 5.625,
+                    cay_kasigi: 2.8125
+                }
+            }
+        }
+    }
+};
+
+// Tabloyu güncelle (değerleri yuvarlayarak göster)
+function updateTable() {
+    const siviTableBody = document.getElementById('sivi-conversion-table-body');
+    const katiTableBody = document.getElementById('kati-conversion-table-body');
+
+    // Sıvı Malzemeler Tablosu
+    siviTableBody.innerHTML = '';
+    Object.keys(categories.sivi_malzemeler.items).forEach(ingredientId => {
+        const ingredient = categories.sivi_malzemeler.items[ingredientId];
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${ingredient.name}</td>
+            <td>${parseFloat(ingredient.rates.su_bardagi.toFixed(2))}g</td>
+            <td>${parseFloat(ingredient.rates.cay_bardagi.toFixed(2))}g</td>
+            <td>${parseFloat(ingredient.rates.fincan.toFixed(2))}g</td>
+            <td>${parseFloat(ingredient.rates.yemek_kasigi.toFixed(2))}g</td>
+            <td>${parseFloat(ingredient.rates.tatli_kasigi.toFixed(2))}g</td>
+            <td>${parseFloat(ingredient.rates.cay_kasigi.toFixed(2))}g</td>
+        `;
+        siviTableBody.appendChild(row);
+    });
+
+    // Katı Malzemeler Tablosu
+    katiTableBody.innerHTML = '';
+    Object.keys(categories.kati_malzemeler.items).forEach(ingredientId => {
+        const ingredient = categories.kati_malzemeler.items[ingredientId];
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${ingredient.name}</td>
+            <td>${parseFloat(ingredient.rates.su_bardagi.toFixed(2))}g</td>
+            <td>${parseFloat(ingredient.rates.cay_bardagi.toFixed(2))}g</td>
+            <td>${parseFloat(ingredient.rates.fincan.toFixed(2))}g</td>
+            <td>${parseFloat(ingredient.rates.yemek_kasigi.toFixed(2))}g</td>
+            <td>${parseFloat(ingredient.rates.tatli_kasigi.toFixed(2))}g</td>
+            <td>${parseFloat(ingredient.rates.cay_kasigi.toFixed(2))}g</td>
+        `;
+        katiTableBody.appendChild(row);
+    });
+}
+
 // Auth işlemleri
 function initAuth() {
     const authTabs = document.querySelectorAll('.auth-tab');
@@ -116,7 +206,7 @@ function initAuth() {
     const loginForm = document.getElementById('login-form');
     const registerForm = document.getElementById('register-form');
     const logoutBtn = document.getElementById('logout-btn');
-    
+
     authTabs.forEach(tab => {
         tab.addEventListener('click', () => {
             authTabs.forEach(t => t.classList.remove('active'));
@@ -132,10 +222,8 @@ function initAuth() {
         const password = document.getElementById('register-password').value;
         const ingredient = document.getElementById('favorite-ingredient').value;
 
-        // localStorage kullanarak kullanıcıları sakla
         const users = JSON.parse(localStorage.getItem('users') || '[]');
-        
-        // Kullanıcı adı kontrolü
+
         if (users.some(user => user.username.toLowerCase() === username.toLowerCase())) {
             alert('Bu kullanıcı adı zaten kayıtlı! Lütfen başka bir kullanıcı adı seçin.');
             return;
@@ -154,7 +242,7 @@ function initAuth() {
 
         const users = JSON.parse(localStorage.getItem('users') || '[]');
         const user = users.find(u => u.username.toLowerCase() === username.toLowerCase() && u.password === password);
-        
+
         if (user) {
             localStorage.setItem('currentUser', JSON.stringify(user));
             document.getElementById('auth-container').style.display = 'none';
@@ -166,7 +254,6 @@ function initAuth() {
         }
     });
 
-    // Eğer kullanıcı zaten giriş yapmışsa
     const currentUser = localStorage.getItem('currentUser');
     if (currentUser) {
         document.getElementById('auth-container').style.display = 'none';
@@ -185,19 +272,39 @@ function logout() {
     document.getElementById('logout-btn').style.display = 'none';
 }
 
+// Sekme değiştirme fonksiyonu
+function initTabs() {
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
+
+            button.classList.add('active');
+            document.getElementById(button.dataset.tab).classList.add('active');
+
+            if (button.dataset.tab === 'converter') {
+                const converterContent = document.querySelector('.converter-container');
+                const converterTab = document.getElementById('converter');
+                converterTab.innerHTML = '';
+                converterTab.appendChild(converterContent);
+            }
+        });
+    });
+}
+
 document.addEventListener('DOMContentLoaded', function() {
+    // Tabloyu güncelle
+    updateTable();
+
     initAuth();
+    initTabs();
+
     const categorySelect = document.getElementById('category');
     const ingredientSelect = document.getElementById('ingredient');
     const convertBtn = document.getElementById('convert-btn');
-
-    // Kategorileri yükle
-    Object.keys(categories).forEach(categoryId => {
-        const option = document.createElement('option');
-        option.value = categoryId;
-        option.textContent = categories[categoryId].name;
-        categorySelect.appendChild(option);
-    });
 
     // İlk kategorinin malzemelerini yükle
     updateIngredients(categorySelect.value);
@@ -207,7 +314,7 @@ document.addEventListener('DOMContentLoaded', function() {
         updateIngredients(this.value);
     });
 
-    convertBtn.addEventListener('click', convertMeasurements);
+    convertBtn.addEventListener('click', () => convertMeasurements());
 
     document.getElementById('amount').addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
@@ -232,16 +339,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const recipeForm = document.getElementById('recipe-form');
     recipeForm.addEventListener('submit', function(e) {
         e.preventDefault();
-        
+
         const recipeName = document.getElementById('recipe-name').value;
         const recipeDescription = document.getElementById('recipe-description').value;
         const ingredients = [];
-        
+
         document.querySelectorAll('.ingredient-row').forEach(row => {
             const name = row.querySelector('.ingredient-name').value;
             const amount = row.querySelector('.ingredient-amount').value;
             const unit = row.querySelector('.ingredient-unit').value;
-            
+
             if (name && amount) {
                 ingredients.push({ name, amount, unit });
             }
@@ -266,14 +373,6 @@ document.addEventListener('DOMContentLoaded', function() {
         let recipes = JSON.parse(localStorage.getItem('recipes') || '[]');
         recipes.push(recipe);
         localStorage.setItem('recipes', JSON.stringify(recipes));
-
-        // siteStorage.txt dosyasına kaydet
-        const recipeText = `${recipe.userId} - ${recipe.name} - ${recipe.date}\n\n`;
-        
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', '/append-storage', true);
-        xhr.setRequestHeader('Content-Type', 'text/plain');
-        xhr.send(recipeText);
 
         // Tarif kartını ekle
         addRecipeCard(recipe);
@@ -322,9 +421,8 @@ function addRecipeCard(recipe) {
 function loadRecipes() {
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     let recipes = JSON.parse(localStorage.getItem('recipes') || '[]');
-    // Sadece mevcut kullanıcının tariflerini filtrele
     recipes = recipes.filter(recipe => recipe.userId === currentUser.username);
-    
+
     const recipesGrid = document.querySelector('.recipes-grid');
     recipesGrid.innerHTML = recipes.length ? '' : '<p class="no-recipes">Henüz kayıtlı tarif yok.</p>';
     recipes.forEach(recipe => addRecipeCard(recipe));
@@ -366,8 +464,7 @@ function addNewIngredient() {
     `;
 
     container.appendChild(newRow);
-    
-    // Yeni eklenen satırın silme butonuna event listener ekle
+
     newRow.querySelector('.remove-ingredient').addEventListener('click', function() {
         this.closest('.ingredient-row').remove();
     });
@@ -388,7 +485,7 @@ function updateIngredients(categoryId) {
 
 function convertMeasurements() {
     const categoryId = document.getElementById('category').value;
-    const itemId = document.getElementById('ingredient').value;
+    const itemId = document.getElementById('ingredient').value.toLowerCase();
     const amount = parseFloat(document.getElementById('amount').value);
     const inputUnit = document.getElementById('input-unit').value;
 
@@ -397,12 +494,30 @@ function convertMeasurements() {
         return;
     }
 
-    const rates = categories[categoryId].items[itemId].rates;
+    const ingredient = categories[categoryId].items[itemId];
+    const rates = ingredient.rates;
     let baseValue;
-    if (inputUnit === 'gram' || inputUnit === 'ml') {
-        baseValue = amount;
+
+    // Sıvı malzemeler için yoğunluk kullanarak dönüşüm
+    if (categoryId === 'sivi_malzemeler') {
+        const density = ingredient.density;
+        if (inputUnit === 'gram') {
+            baseValue = amount; // Gram zaten temel birim
+        } else if (inputUnit === 'ml') {
+            baseValue = parseFloat((amount * density).toFixed(2)); // mL'yi gram'a çevir: mL * yoğunluk
+        } else {
+            // Diğer birimler için önce mL'ye çevir, sonra gram'a
+            const mlPerUnit = parseFloat((rates[inputUnit] / density).toFixed(2)); // Örneğin, 1 su bardağı süt: 206 g / 1.03 = 200 mL
+            const totalMl = parseFloat((amount * mlPerUnit).toFixed(2));
+            baseValue = parseFloat((totalMl * density).toFixed(2)); // Gram = mL * yoğunluk
+        }
     } else {
-        baseValue = amount * rates[inputUnit];
+        // Katı malzemeler için mevcut mantığı kullan
+        if (inputUnit === 'gram' || inputUnit === 'ml') {
+            baseValue = amount;
+        } else {
+            baseValue = parseFloat((amount * rates[inputUnit]).toFixed(2));
+        }
     }
 
     const resultCardsContainer = document.getElementById('result-cards');
@@ -410,8 +525,23 @@ function convertMeasurements() {
 
     Object.keys(rates).forEach(unit => {
         if (unit !== inputUnit) {
-            let result = baseValue / rates[unit];
-            result = Number(result.toFixed(2));
+            let result;
+            if (categoryId === 'sivi_malzemeler') {
+                // Sıvılar için: önce gram'ı mL'ye çevir, sonra hedef birime
+                const density = ingredient.density;
+                const totalMl = parseFloat((baseValue / density).toFixed(2)); // Gram'ı mL'ye çevir
+                if (unit === 'gram') {
+                    result = baseValue;
+                } else if (unit === 'ml') {
+                    result = totalMl;
+                } else {
+                    const mlPerUnit = parseFloat((rates[unit] / density).toFixed(2)); // Örneğin, 1 yemek kaşığı süt: 15.45 g / 1.03 = 15 mL
+                    result = parseFloat((totalMl / mlPerUnit).toFixed(2));
+                }
+            } else {
+                // Katı malzemeler için mevcut mantık
+                result = parseFloat((baseValue / rates[unit]).toFixed(2));
+            }
 
             const card = document.createElement('div');
             card.className = 'result-card';
