@@ -32,12 +32,13 @@
 .tab-content {
     display: none;
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
 .tab-content.active {
     display: block;
     opacity: 1;
+    transform: translateY(0);
 }
 
 .calculator-container {
@@ -354,6 +355,14 @@ select option {
     margin-top: 4rem;
 }
 
+/* Info Header Stili */
+.info-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
 h2 {
     color: #2d3436;
     margin-bottom: 2rem;
@@ -381,6 +390,12 @@ h2::after {
     border-radius: 12px;
     box-shadow: 0 5px 20px rgba(0,0,0,0.05);
     min-width: 100%; /* Tablonun taşmasını önlemek için */
+}
+
+.table-container h3 {
+    margin: 1rem 1.5rem;
+    color: #2d3436;
+    font-size: 1.5rem;
 }
 
 table {
